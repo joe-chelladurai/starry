@@ -1,20 +1,21 @@
 
 
 #' Frequency App
-#' @param df data
+#' @param data data
 #' @import shiny
 #' @importFrom dplyr count
 #' @return No return value. This function is called for the side effect of
 #' launching a shiny application.
 #' @examples
 #' if (interactive()) {
-#' app_frequency(mtcars)
+#' stat_frequency(mtcars)
 #' }
 #' @export
 
-app_frequency <- function(df) {
+stat_frequency <- function(data) {
+
   frequency_ui <- function(id,
-                           df) {
+                           data) {
     ns <- NS(id)
 
     fluidPage(
@@ -23,7 +24,7 @@ app_frequency <- function(df) {
         sidebarPanel(width = 3,
                      selectizeInput(NS(id, "frequency_xvar"),
                                     label = "X",
-                                    choices = c("", names(df)),
+                                    choices = c("", names(data)),
                      )),
         mainPanel(width = 9,
                   fluidRow(tableOutput(NS(id, "frequency_table")))
@@ -31,13 +32,13 @@ app_frequency <- function(df) {
       ))
   }
 
-  frequency_se <- function(id, df) {
+  frequency_se <- function(id, data) {
     moduleServer(id, function(input, output, session) {
-      observeEvent(df, {
+      observeEvent(data, {
         updateSelectizeInput(
           session,
           "frequency_xvar",
-          choices = c("", names(df))
+          choices = c("", names(data))
         )
       })
 
@@ -45,7 +46,7 @@ app_frequency <- function(df) {
 
       code_text <- reactive({
         t <- paste0(
-          "\n \n df |> ",
+          "\n \n data |> ",
           "\n    count(", input$frequency_xvar, ")"
         )
       })
@@ -67,11 +68,11 @@ app_frequency <- function(df) {
 
     theme = bslib::bs_theme(enable_rounded = FALSE),
     tags$style(' .well  { background-color: "#ffffff" !important;}'),
-    frequency_ui("module", df)
+    frequency_ui("module", data)
   )
 
   server <- function(input, output, session) {
-    frequency_se("module", df)
+    frequency_se("module", data)
   }
   shinyApp(ui, server)
 }

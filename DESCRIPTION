@@ -12,7 +12,11 @@ LazyData: true
 Imports: 
     bslib,
     dplyr,
-    shiny
+    ggplot2,
+    magrittr,
+    shiny,
+    shinyjs,
+    shinyWidgets
 RoxygenNote: 7.2.1
 Suggests: 
     knitr,
