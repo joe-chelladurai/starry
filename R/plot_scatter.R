@@ -2,6 +2,19 @@
 
 #' Plot - Scatter
 #' @param data data
+#' @param xvar x
+#' @param yvar y
+#' @param color color
+#' @param shape shape
+#' @param size size
+#' @param row row
+#' @param column column
+#' @param title title
+#' @param subtitle subtitle
+#' @param caption caption
+#' @param xlab x axis label
+#' @param ylab y axis label
+#' @param theme theme
 #' @import shiny
 #' @import ggplot2
 #' @importFrom shinyjs hidden removeClass addClass toggle runjs
@@ -14,11 +27,40 @@
 #' }
 #' @export
 
-plot_scatter <- function(data) {
+plot_scatter <- function(data, xvar, yvar, color, shape, size, row, column, title, subtitle, caption, xlab, ylab, theme) {
+
+  if (missing(xvar)) {xvar = ""} else {xvar = deparse(substitute(xvar))}
+  if (missing(yvar)) {yvar = ""} else {yvar = deparse(substitute(yvar))}
+  if (missing(color)) {color = ""} else {color = deparse(substitute(color))}
+  if (missing(shape)) {shape = ""} else {shape = deparse(substitute(shape))}
+  if (missing(size)) {size = ""} else {size = deparse(substitute(size))}
+  if (missing(row)) {row = ""} else {row = deparse(substitute(row))}
+  if (missing(column)) {column = ""} else {column = deparse(substitute(column))}
+  if (missing(title)) {title = ""}
+  if (missing(subtitle)) {subtitle = ""}
+  if (missing(caption)) {caption = ""}
+  if (missing(xlab)) {xlab = ""}
+  if (missing(ylab)) {ylab = ""}
+  if (missing(theme)) {theme = "theme_bw"} else {theme = deparse(substitute(theme))}
+
+
 
 
 plot_scatter_UI <- function(id,
-                           data) {
+                           data,
+                           scatter_xvar = xvar,
+                           scatter_yvar = yvar,
+                           scatter_group = color,
+                           scatter_shape = shape,
+                           scatter_size = size,
+                           scatter_wraprow = row,
+                           scatter_wrapcol = column,
+                           scatter_title = title,
+                           scatter_subtitle = subtitle,
+                           scatter_caption = caption,
+                           scatter_xlab = xlab,
+                           scatter_ylab = ylab,
+                           scatter_theme = theme) {
   ns <- NS(id)
   tagList(
     div(
@@ -54,13 +96,13 @@ plot_scatter_UI <- function(id,
               NS(id, "scatter_xvar"),
               label = "X",
               choices = c("", names(data)),
-              selected = ""
+              selected = scatter_xvar
             ),
             selectInput(
               NS(id, "scatter_yvar"),
               label = "Y",
               choices = c("", names(data)),
-              selected = ""
+              selected = scatter_yvar
             ),
             checkboxInput(
               NS(id, "scatter_attr"),
@@ -78,19 +120,19 @@ plot_scatter_UI <- function(id,
                 NS(id, "scatter_group"),
                 label = "Color",
                 choices = c("", names(data)),
-                selected = ""
+                selected = scatter_group
               ),
               selectInput(
                 NS(id, "scatter_shape"),
                 label = "Shape",
                 choices = c("", names(data)),
-                selected = ""
+                selected = scatter_shape
               ),
               selectInput(
                 NS(id, "scatter_size"),
                 label = "Size",
                 choices = c("", names(data)),
-                selected = ""
+                selected = scatter_shape
               )
             ),
 
@@ -110,13 +152,13 @@ plot_scatter_UI <- function(id,
                 NS(id, "scatter_wraprow"),
                 label = "Row",
                 choices = c("", names(data)),
-                selected = ""
+                selected = scatter_wraprow
               ),
               selectInput(
                 NS(id, "scatter_wrapcol"),
                 label = "Column",
                 choices = c("", names(data)),
-                selected = ""
+                selected = scatter_wrapcol
               )
             ),
 
@@ -130,23 +172,23 @@ plot_scatter_UI <- function(id,
             hidden(
               textInput(NS(id, "scatter_title"),
                         label = "Title",
-                        value = ""
+                        value = scatter_title
               ),
               textInput(NS(id, "scatter_subtitle"),
                         label = "Subtitle",
-                        value = ""
+                        value = scatter_subtitle
               ),
               textInput(NS(id, "scatter_caption"),
                         label = "Caption",
-                        value = ""
+                        value = scatter_caption
               ),
               textInput(NS(id, "scatter_xlab"),
                         label = "X-axis label",
-                        value = ""
+                        value = scatter_xlab
               ),
               textInput(NS(id, "scatter_ylab"),
                         label = "Y-axis label",
-                        value = ""
+                        value = scatter_ylab
               )
             ),
 
@@ -184,7 +226,7 @@ plot_scatter_UI <- function(id,
             hidden(
               selectInput(NS(id, "scatter_theme"),
                           label = "Theme",
-                          selected = "",
+                          selected = scatter_theme,
                           choices = c("",
                                       `Black & White` = "theme_bw",
                                       `Minimal` = "theme_minimal",
@@ -270,7 +312,7 @@ plot_scatter_SE <- function(id) {
         "scatter_size",
         choices = c("", names(data))
       )
-    })
+    }, ignoreInit = TRUE)
 
 
 
@@ -534,7 +576,7 @@ ui <- fluidPage(
               .bootstrap-switch.bootstrap-switch-focused {	border-color: #d4d0d0;	outline: 0;	-webkit-box-shadow: none; box-shadow: none;}
               .bootstrap-switch.bootstrap-switch-mini .bootstrap-switch-handle-off, .bootstrap-switch.bootstrap-switch-mini .bootstrap-switch-handle-on, .bootstrap-switch.bootstrap-switch-mini .bootstrap-switch-label {padding: 1px 5px;font-size: 12px;line-height: 1;}
               .btn-play {padding: 0 !important;  margin-bottom: 10px;border: none;}
-              .btn-play:hover {color: #ffffff;background-color:  #ffffff;border-color:  #ffffff;}
+              .btn-play:hover {color: #000000; background-color:  #ffffff;border-color:  #ffffff;}
               .module-style { text-align: left; background-color: #faf9f7; border: 0; margin-bottom: 5px;}
               .parent .row .col-sm-3 {max-width: 400px !important;min-width: 300px !important;}
               .custom-scroll {max-height: 80vh;min-height: 30vh;overflow-y: auto;overflow-x: hidden;position: relative;scrollbar-width: thin;padding-right: 15px;}
@@ -555,7 +597,6 @@ server <- function(input, output, session) {
 
 
 shinyApp(ui, server)
-
 
 }
 
