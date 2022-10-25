@@ -1,7 +1,7 @@
-
 # starry
 
 <!-- badges: start -->
+
 <!-- badges: end -->
 
 The goal of starry is to ...
@@ -30,3 +30,9 @@ It is pipeable
 mtcars |>
   plot_scatter(hp, disp)
 ```
+
+## Functions
+
+-   plot_scatter - done
+
+-   plot_barchart - done
