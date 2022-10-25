@@ -443,7 +443,7 @@ plot_barchart_SE <- function(id) {
     code_text <- reactive({
       req(isTruthy(input$barchart_yvar != ""))
 
-      t <- paste0(
+      code <- paste0(
         "\n \n ggplot(data, aes(",
         if (input$barchart_yvar != "") {
           paste0("y = factor(", input$barchart_yvar, ")")
@@ -503,8 +503,8 @@ plot_barchart_SE <- function(id) {
         )
       )
 
-      t <- paste(
-        t,
+      code <- paste(
+        code,
         if (input$barchart_yvar != "" &&
           input$barchart_shape == "") {
           paste()
@@ -512,8 +512,8 @@ plot_barchart_SE <- function(id) {
       )
 
 
-      t <- paste(
-        t,
+      code <- paste(
+        code,
         if (input$barchart_wraprow != "" &&
           input$barchart_wrapcol != "") {
           paste0(
@@ -535,8 +535,8 @@ plot_barchart_SE <- function(id) {
       )
 
 
-      t <- paste(
-        t,
+      code <- paste(
+        code,
         if (input$barchart_title != "") {
           paste0(
             "+ \n    labs(title = '",
@@ -548,8 +548,8 @@ plot_barchart_SE <- function(id) {
 
 
 
-      t <- paste(
-        t,
+      code <- paste(
+        code,
         if (input$barchart_subtitle != "") {
           paste0(
             "+ \n    labs(subtitle = '",
@@ -559,8 +559,8 @@ plot_barchart_SE <- function(id) {
       )
 
 
-      t <- paste(
-        t,
+      code <- paste(
+        code,
         if (input$barchart_caption != "") {
           paste0(
             "+ \n    labs(caption = '",
@@ -569,8 +569,8 @@ plot_barchart_SE <- function(id) {
         }
       )
 
-      t <- paste(
-        t,
+      code <- paste(
+        code,
         if (input$barchart_xlab != "") {
           paste0(
             "+ \n    labs(x = '",
@@ -580,8 +580,8 @@ plot_barchart_SE <- function(id) {
       )
 
 
-      t <- paste(
-        t,
+      code <- paste(
+        code,
         if (input$barchart_ylab != "") {
           paste0(
             "+ \n    labs(y = '",
@@ -591,8 +591,8 @@ plot_barchart_SE <- function(id) {
       )
 
 
-      t <- paste(
-        t,
+      code <- paste(
+        code,
         if (input$barchart_position != "fill") {
           if (input$barchart_labels == "count") {
             paste0(
@@ -667,8 +667,8 @@ plot_barchart_SE <- function(id) {
       )
 
 
-      t <- paste(
-        t,
+      code <- paste(
+        code,
         if (input$barchart_position == "fill") {
           if (input$barchart_labels == "percent") {
             paste0(
@@ -681,8 +681,8 @@ plot_barchart_SE <- function(id) {
 
 
 
-      t <- paste(
-        t,
+      code <- paste(
+        code,
         if (input$barchart_theme != "") {
           paste0(
             "+ \n    ",
@@ -692,12 +692,12 @@ plot_barchart_SE <- function(id) {
       )
 
 
-      t <- paste0(
-        t,
+      code <- paste0(
+        code,
         paste0(input$barchart_code)
       )
 
-      t
+      code
     })
 
     run <- reactive({
