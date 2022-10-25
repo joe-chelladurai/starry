@@ -16,7 +16,7 @@
 
 
 
-plot_barchart <- function(data, yvar, num, theme, group, code, shape, size, position, labels, row, prop, column, title, subtitle, xlab, ylab, caption) {
+plot_barchart <- function(data, yvar, theme, group, code, shape, size, position, labels, row, prop, column, title, subtitle, xlab, ylab, caption) {
 
 
 
@@ -32,10 +32,9 @@ plot_barchart <- function(data, yvar, num, theme, group, code, shape, size, posi
   if (missing(xlab)) {xlab = ""}
   if (missing(ylab)) {ylab = ""}
   if (missing(theme)) {theme = "theme_bw"} else {theme = deparse(substitute(theme))}
-  if (missing(num)) {num = ""} else {num = deparse(substitute(num))}
   if (missing(code)) {code = ""}
-  if (missing(position)) {position = ""}
-  if (missing(labels)) {labels = ""} else {labels = deparse(substitute(labels))}
+  if (missing(position)) {position = "none"} else {position = deparse(substitute(position))}
+  if (missing(labels)) {labels = "none"} else {labels = deparse(substitute(labels))}
   if (missing(prop)) {prop = ""} else {prop = deparse(substitute(prop))}
 
 
@@ -43,7 +42,23 @@ plot_barchart <- function(data, yvar, num, theme, group, code, shape, size, posi
 
 plot_barchart_UI <- function(id,
                              data,
-                             barchart_yvar = yvar) {
+                             barchart_yvar = yvar,
+                             barchart_theme = theme,
+                             barchart_group = group,
+                             barchart_code = code,
+                             barchart_shape = shape,
+                             barchart_size = size,
+                             barchart_position = position,
+                             barchart_labels = labels,
+                             barchart_wraprow = row,
+                             barchart_prop = prop,
+                             barchart_wrapcol = column,
+                             barchart_title = title,
+                             barchart_subtitle = subtitle,
+                             barchart_xlab = xlab,
+                             barchart_ylab = ylab,
+                             barchart_caption = caption
+                          ) {
   ns <- NS(id)
   tagList(
     div(
@@ -83,35 +98,35 @@ plot_barchart_UI <- function(id,
             selectInput(NS(id, "barchart_shape"),
               label = "Fill",
               choices = c("", names(data)),
-           #   selected = barchart_shape
+              selected = barchart_shape
             ),
             selectizeInput(NS(id, "barchart_size"),
               label = "Outline",
               choices = c("", names(data)),
-      #        selected = barchart_size,
+              selected = barchart_size,
               options = list(create = TRUE)
             ),
             radioButtons(NS(id, "barchart_position"),
               label = "Position",
-              choices = c("None", "stack", "dodge", "dodge2", "fill"),
-      #        selected = barchart_position,
+              choices = c("none", "stack", "dodge", "dodge2", "fill"),
+              selected = barchart_position,
               inline = TRUE # )
             ),
             radioButtons(NS(id, "barchart_labels"),
               label = "Data Labels",
-              choices = c("None", "Count", "Percent"),
-       #       selected = barchart_labels,
+              choices = c("none", "count", "percent"),
+              selected = barchart_labels,
               inline = TRUE
             ),
             selectInput(NS(id, "barchart_prop"),
               label = "Proportion by: ",
               choices = "",
-      #        selected = barchart_prop,
+              selected = barchart_prop,
             ),
             numericInput(NS(id, "barchart_group"),
               label = "Bar width",
               step = 0.1,
-              value = 0.1 #barchart_group
+              value = barchart_group
             ),
             actionButton(NS(id, "toggle_barchart_facet"),
               width = "100%",
@@ -123,12 +138,12 @@ plot_barchart_UI <- function(id,
               selectInput(NS(id, "barchart_wraprow"),
                 label = "Row",
                 choices = c("", names(data)),
-            #    selected = barchart_wraprow
+                selected = barchart_wraprow
               ),
               selectInput(NS(id, "barchart_wrapcol"),
                 label = "Column",
                 choices = c("", names(data)),
-            #    selected = barchart_wrapcol
+                selected = barchart_wrapcol
               )
             ),
             actionButton(NS(id, "toggle_barchart_text"),
@@ -140,23 +155,23 @@ plot_barchart_UI <- function(id,
             hidden(
               textInput(NS(id, "barchart_title"),
                 label = "Title",
-          #      value = barchart_title
+                value = barchart_title
               ),
               textInput(NS(id, "barchart_subtitle"),
                 label = "Subtitle",
-        #        value = barchart_subtitle
+                value = barchart_subtitle
               ),
               textInput(NS(id, "barchart_caption"),
                 label = "Caption",
-        #        value = barchart_caption
+                value = barchart_caption
               ),
               textInput(NS(id, "barchart_xlab"),
                 label = "X-axis label",
-       #         value = barchart_xlab
+                value = barchart_xlab
               ),
               textInput(NS(id, "barchart_ylab"),
                 label = "Y-axis label",
-        #        value = barchart_ylab
+                value = barchart_ylab
               )
             ),
             actionButton(NS(id, "toggle_plot_options"),
@@ -188,7 +203,7 @@ plot_barchart_UI <- function(id,
             hidden(
               selectInput(NS(id, "barchart_theme"),
                 label = "Theme",
-         #       selected = barchart_theme,
+                selected = barchart_theme,
                 choices = c("",
                   `Black & White` = "theme_bw",
                   `Minimal` = "theme_minimal",
@@ -209,7 +224,7 @@ plot_barchart_UI <- function(id,
             ),
             hidden(
               textAreaInput(NS(id, "barchart_code"),
-          #      value = barchart_code,
+                value = barchart_code,
                 label = NULL
               ),
               prettyCheckbox(NS(id, "barchart_showcode"),
@@ -222,12 +237,6 @@ plot_barchart_UI <- function(id,
         ),
         div(
           class = "result-view",
-       #   fluidRow(actionButton(NS(id, "barchart_rmv"),
-       #     class = "child",
-       #     label = NULL,
-       #     icon = icon("fas fa-times"),
-       #     value = barchart_rmv
-       #   )),
           fluidRow(plotOutput(NS(id, "barchart_plot"), width = "auto", height = "auto")),
           fluidRow(verbatimTextOutput(NS(id, "barchart_text")) %>%
             tagAppendAttributes(class = "codeoutput"))
@@ -383,14 +392,6 @@ plot_barchart_SE <- function(id) {
     ns <- NS(id)
 
 
-
-  #  observeEvent(input$barchart_rmv, {
-  #    removeUI(
-  #      selector = paste0("#", ns("placeholder1"))
-  #    )
-  #  })
-
-
     observeEvent(input$toggle_plot_options,
       {
         toggle("barchart_width")
@@ -452,7 +453,7 @@ plot_barchart_SE <- function(id) {
         } else {
 
         },
-        if ((input$barchart_shape != "" && input$barchart_position == "fill") || input$barchart_labels == "Percent") {
+        if ((input$barchart_shape != "" && input$barchart_position == "fill") || input$barchart_labels == "percent") {
           if (input$barchart_shape == "") {
             paste0(", by = 1")
           } else {
@@ -470,7 +471,7 @@ plot_barchart_SE <- function(id) {
           "))"
         ),
         paste0(
-          if (input$barchart_labels == "Percent") {
+          if (input$barchart_labels == "percent") {
             " + \n    geom_bar(aes(x = ..prop..), stat = 'prop'"
           } else {
             " + \n    geom_bar(aes(x = ..count..), stat = 'count'"
@@ -593,7 +594,7 @@ plot_barchart_SE <- function(id) {
       t <- paste(
         t,
         if (input$barchart_position != "fill") {
-          if (input$barchart_labels == "Count") {
+          if (input$barchart_labels == "count") {
             paste0(
               "+ \n    geom_text(aes(",
               "label = ..count..), stat = 'count'",
@@ -625,7 +626,7 @@ plot_barchart_SE <- function(id) {
                 #      ")"
               }, ")"
             )
-          } else if (input$barchart_labels == "Percent") {
+          } else if (input$barchart_labels == "percent") {
             paste0(
               "+ \n    geom_text(aes(",
               "x = ..prop..), stat = 'prop'",
@@ -669,7 +670,7 @@ plot_barchart_SE <- function(id) {
       t <- paste(
         t,
         if (input$barchart_position == "fill") {
-          if (input$barchart_labels == "Percent") {
+          if (input$barchart_labels == "percent") {
             paste0(
               "+ \n    geom_text(stat = 'prop', position = position_fill()) "
             )
