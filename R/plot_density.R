@@ -1,23 +1,50 @@
 
-plot_density_UI <- function(id,
-                            density_xvar,
-                            density_fill,
-                            density_outline,
-                            density_wraprow,
-                            density_wrapcol,
-                            density_height,
-                            density_width,
-                            density_theme,
-                            density_title,
-                            density_subtitle,
-                            density_caption,
-                            density_xlab,
-                            density_ylab,
-                            density_code,
-                            density_showcode,
-                            density_instantlocal,
-                            density_run,
-                            density_rmv) {
+
+
+
+
+
+
+plot_density <- function(data, xvar, fill, outline, row, column, height, width, theme, title, subtitle, caption, xlab, ylab, code, show_code) {
+
+
+
+  if (missing(xvar)) {yvar = ""} else {yvar = deparse(substitute(xvar))}
+  if (missing(fill)) {fill = ""} else {fill = deparse(substitute(fill))}
+  if (missing(outline)) {outline = ""} else {outline = deparse(substitute(outline))}
+  if (missing(height)) {height = NA}
+  if (missing(width)) {width = NA}
+  if (missing(row)) {row = ""} else {row = deparse(substitute(row))}
+  if (missing(column)) {column = ""} else {column = deparse(substitute(column))}
+  if (missing(title)) {title = ""}
+  if (missing(subtitle)) {subtitle = ""}
+  if (missing(caption)) {caption = ""}
+  if (missing(xlab)) {xlab = ""}
+  if (missing(ylab)) {ylab = ""}
+  if (missing(theme)) {theme = "theme_bw"} else {theme = deparse(substitute(theme))}
+  if (missing(code)) {code = ""}
+  if (missing(show_code)) {show_code = FALSE}
+
+
+
+
+plot_density_ui <- function(id,
+                            density_xvar = xvar,
+                            density_fill = fill,
+                            density_outline = outline,
+                            density_wraprow = row,
+                            density_wrapcol = column,
+                            density_height = height,
+                            density_width = width,
+                            density_theme = theme,
+                            density_title = title,
+                            density_subtitle = subtitle,
+                            density_caption = caption,
+                            density_xlab = xlab,
+                            density_ylab = ylab,
+                            density_code = code,
+                            density_showcode = show_code
+                            ) {
   ns <- NS(id)
   tagList(
     div(
@@ -197,15 +224,7 @@ plot_density_UI <- function(id,
         ),
         div(
           class = "result-view",
-          fluidRow(
-            actionButton(
-              NS(id, "density_rmv"),
-              label = NULL,
-              icon = icon("fas fa-times"),
-              class = "child",
-              value = density_rmv
-            )
-          ),
+
           fluidRow(
             plotOutput(
               NS(id, "density_plot"),
@@ -223,7 +242,7 @@ plot_density_UI <- function(id,
   )
 }
 
-plot_density_SE <- function(id) {
+plot_density_se <- function(id) {
   moduleServer(id, function(input, output, session) {
     observeEvent(data, {
       updateSelectInput(
@@ -262,11 +281,7 @@ plot_density_SE <- function(id) {
 
 
     ns <- NS(id)
-    observeEvent(input$density_rmv, {
-      removeUI(
-        selector = paste0("#", ns("placeholder1"))
-      )
-    })
+
 
     observeEvent(input$toggle_density_size,
       {
@@ -357,8 +372,8 @@ plot_density_SE <- function(id) {
           paste0("+ \n    facet_grid(", input$density_wraprow, " ~ . )")
         }
       )
-      
-      
+
+
       t <- paste(
         t,
         if (input$density_theme != "") {
@@ -369,7 +384,7 @@ plot_density_SE <- function(id) {
       t <- paste(
         t,
         if (input$density_title != "") {
-          paste0("+ \n    labs(title = '", input$densityt_title, "')")
+          paste0("+ \n    labs(title = '", input$density_title, "')")
         }
       )
 
@@ -480,3 +495,49 @@ plot_density_SE <- function(id) {
     })
   })
 }
+
+
+ui <- fluidPage(
+  shinyjs::useShinyjs(),
+  tags$head(
+    tags$style(
+      HTML('
+              .input-view .well { width: 350px; margin-left: -10px; }
+              .well  { background-color: #ffffff !important;}
+              .result-view { margin-left: 20px; width: 700px; }
+              .toggle-btnplay { visibility: visible; background: none; }
+              .cont2 .shiny-input-container:not(.shiny-input-container-inline) { width: auto; 	max-width: 100%; }
+              .cont3 { margin-left: 10px; visibility: hidden; }
+              .grid-container { display: flex; }
+              #code { white-space: pre; margin: 20px; }
+              .module-name {margin-top: 4px; font-style: italic;  width: 275px;}
+              .shiny-text-output {  border: none;  margin-top: 20px;}
+              .bootstrap-switch.bootstrap-switch-focused {	border-color: #d4d0d0;	outline: 0;	-webkit-box-shadow: none; box-shadow: none;}
+              .bootstrap-switch.bootstrap-switch-mini .bootstrap-switch-handle-off, .bootstrap-switch.bootstrap-switch-mini .bootstrap-switch-handle-on, .bootstrap-switch.bootstrap-switch-mini .bootstrap-switch-label {padding: 1px 5px;font-size: 12px;line-height: 1;}
+              .btn-play {padding: 0 !important;  margin-bottom: 10px;border: none;}
+              .btn-play:hover {color: #000000; background-color:  #ffffff;border-color:  #ffffff;}
+              .module-style { text-align: left; background-color: #faf9f7; border: 0; margin-bottom: 5px;}
+              .parent .row .col-sm-3 {max-width: 400px !important;min-width: 300px !important;}
+              .custom-scroll {max-height: 80vh;min-height: 30vh;overflow-y: auto;overflow-x: hidden;position: relative;scrollbar-width: thin;padding-right: 15px;}
+              .custom-scroll::-webkit-scrollbar {width: 4px;background: #faf9f7;}
+              .custom-scroll::-webkit-scrollbar-track {-webkit-border-radius: 2px;border-radius: 2px;}
+              .custom-scroll::-webkit-scrollbar-thumb {-webkit-border-radius: 2px;border-radius: 2px;background:  #C0C0C0;}
+
+
+             ')
+    )
+  ),
+  theme = bslib::bs_theme(),
+  plot_density_ui("module", data)
+)
+server <- function(input, output, session) {
+  plot_density_se("module")
+}
+
+
+shinyApp(ui, server)
+
+
+
+}
+plot_density(mtcars)
