@@ -43,23 +43,7 @@ plot_barchart <- function(data, yvar, num, theme, group, code, shape, size, posi
 
 plot_barchart_UI <- function(id,
                              data,
-                             barchart_yvar = yvar,
-                             barchart_num = num,
-                             barchart_theme = theme,
-                             barchart_group = group,
-                             barchart_code = code,
-                             barchart_shape = shape,
-                             barchart_size = size,
-                             barchart_position = position,
-                             barchart_labels = labels,
-                             barchart_wraprow = row,
-                             barchart_prop = prop,
-                             barchart_wrapcol = column,
-                             barchart_title = title,
-                             barchart_subtitle = subtitle,
-                             barchart_xlab = xlab,
-                             barchart_ylab = ylab,
-                             barchart_caption = caption) {
+                             barchart_yvar = yvar) {
   ns <- NS(id)
   tagList(
     div(
@@ -99,35 +83,35 @@ plot_barchart_UI <- function(id,
             selectInput(NS(id, "barchart_shape"),
               label = "Fill",
               choices = c("", names(data)),
-              selected = barchart_shape
+           #   selected = barchart_shape
             ),
             selectizeInput(NS(id, "barchart_size"),
               label = "Outline",
               choices = c("", names(data)),
-              selected = barchart_size,
+      #        selected = barchart_size,
               options = list(create = TRUE)
             ),
             radioButtons(NS(id, "barchart_position"),
               label = "Position",
               choices = c("None", "stack", "dodge", "dodge2", "fill"),
-              selected = barchart_position,
+      #        selected = barchart_position,
               inline = TRUE # )
             ),
             radioButtons(NS(id, "barchart_labels"),
               label = "Data Labels",
               choices = c("None", "Count", "Percent"),
-              selected = barchart_labels,
+       #       selected = barchart_labels,
               inline = TRUE
             ),
             selectInput(NS(id, "barchart_prop"),
               label = "Proportion by: ",
               choices = "",
-              selected = barchart_prop,
+      #        selected = barchart_prop,
             ),
             numericInput(NS(id, "barchart_group"),
               label = "Bar width",
               step = 0.1,
-              value = barchart_group
+              value = 0.1 #barchart_group
             ),
             actionButton(NS(id, "toggle_barchart_facet"),
               width = "100%",
@@ -139,12 +123,12 @@ plot_barchart_UI <- function(id,
               selectInput(NS(id, "barchart_wraprow"),
                 label = "Row",
                 choices = c("", names(data)),
-                selected = barchart_wraprow
+            #    selected = barchart_wraprow
               ),
               selectInput(NS(id, "barchart_wrapcol"),
                 label = "Column",
                 choices = c("", names(data)),
-                selected = barchart_wrapcol
+            #    selected = barchart_wrapcol
               )
             ),
             actionButton(NS(id, "toggle_barchart_text"),
@@ -156,23 +140,23 @@ plot_barchart_UI <- function(id,
             hidden(
               textInput(NS(id, "barchart_title"),
                 label = "Title",
-                value = barchart_title
+          #      value = barchart_title
               ),
               textInput(NS(id, "barchart_subtitle"),
                 label = "Subtitle",
-                value = barchart_subtitle
+        #        value = barchart_subtitle
               ),
               textInput(NS(id, "barchart_caption"),
                 label = "Caption",
-                value = barchart_caption
+        #        value = barchart_caption
               ),
               textInput(NS(id, "barchart_xlab"),
                 label = "X-axis label",
-                value = barchart_xlab
+       #         value = barchart_xlab
               ),
               textInput(NS(id, "barchart_ylab"),
                 label = "Y-axis label",
-                value = barchart_ylab
+        #        value = barchart_ylab
               )
             ),
             actionButton(NS(id, "toggle_plot_options"),
@@ -204,7 +188,7 @@ plot_barchart_UI <- function(id,
             hidden(
               selectInput(NS(id, "barchart_theme"),
                 label = "Theme",
-                selected = barchart_theme,
+         #       selected = barchart_theme,
                 choices = c("",
                   `Black & White` = "theme_bw",
                   `Minimal` = "theme_minimal",
@@ -225,7 +209,7 @@ plot_barchart_UI <- function(id,
             ),
             hidden(
               textAreaInput(NS(id, "barchart_code"),
-                value = barchart_code,
+          #      value = barchart_code,
                 label = NULL
               ),
               prettyCheckbox(NS(id, "barchart_showcode"),
@@ -798,4 +782,4 @@ shinyApp(ui, server)
 
 }
 
-plot_barchart(mtcars)
+plot_barchart(mtcars, yvar = cyl)
