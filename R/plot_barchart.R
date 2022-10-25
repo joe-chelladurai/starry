@@ -16,54 +16,50 @@
 
 
 
-plot_barchart <- function(data, barchart_yvar,
-                          barchart_num,
-                          barchart_theme,
-                          barchart_group,
-                          barchart_code,
-                          barchart_shape,
-                          barchart_size,
-                          barchart_position,
-                          barchart_labels,
-                          barchart_wraprow,
-                          barchart_prop,
-                          barchart_wrapcol,
-                          barchart_rmv,
-                          barchart_width,
-                          barchart_height,
-                          barchart_title,
-                          barchart_subtitle,
-                          barchart_xlab,
-                          barchart_ylab,
-                          barchart_caption,
-                          barchart_showcode,
-                          barchart_instantlocal,
-                          barchart_run) {
+plot_barchart <- function(data, yvar, num, theme, group, code, shape, size, position, labels, row, prop, column, title, subtitle, xlab, ylab, caption) {
+
+
+
+  if (missing(yvar)) {yvar = ""} else {yvar = deparse(substitute(yvar))}
+  if (missing(shape)) {shape = ""} else {shape = deparse(substitute(shape))}
+  if (missing(group)) {group = ""} else {group = deparse(substitute(group))}
+  if (missing(size)) {size = ""} else {size = deparse(substitute(size))}
+  if (missing(row)) {row = ""} else {row = deparse(substitute(row))}
+  if (missing(column)) {column = ""} else {column = deparse(substitute(column))}
+  if (missing(title)) {title = ""}
+  if (missing(subtitle)) {subtitle = ""}
+  if (missing(caption)) {caption = ""}
+  if (missing(xlab)) {xlab = ""}
+  if (missing(ylab)) {ylab = ""}
+  if (missing(theme)) {theme = "theme_bw"} else {theme = deparse(substitute(theme))}
+  if (missing(num)) {num = ""} else {num = deparse(substitute(num))}
+  if (missing(code)) {code = ""}
+  if (missing(position)) {position = ""}
+  if (missing(labels)) {labels = ""} else {labels = deparse(substitute(labels))}
+  if (missing(prop)) {prop = ""} else {prop = deparse(substitute(prop))}
+
+
+
 
 plot_barchart_UI <- function(id,
-                             barchart_yvar,
-                             barchart_num,
-                             barchart_theme,
-                             barchart_group,
-                             barchart_code,
-                             barchart_shape,
-                             barchart_size,
-                             barchart_position,
-                             barchart_labels,
-                             barchart_wraprow,
-                             barchart_prop,
-                             barchart_wrapcol,
-                             barchart_rmv,
-                             barchart_width,
-                             barchart_height,
-                             barchart_title,
-                             barchart_subtitle,
-                             barchart_xlab,
-                             barchart_ylab,
-                             barchart_caption,
-                             barchart_showcode,
-                             barchart_instantlocal,
-                             barchart_run) {
+                             data,
+                             barchart_yvar = yvar,
+                             barchart_num = num,
+                             barchart_theme = theme,
+                             barchart_group = group,
+                             barchart_code = code,
+                             barchart_shape = shape,
+                             barchart_size = size,
+                             barchart_position = position,
+                             barchart_labels = labels,
+                             barchart_wraprow = row,
+                             barchart_prop = prop,
+                             barchart_wrapcol = column,
+                             barchart_title = title,
+                             barchart_subtitle = subtitle,
+                             barchart_xlab = xlab,
+                             barchart_ylab = ylab,
+                             barchart_caption = caption) {
   ns <- NS(id)
   tagList(
     div(
@@ -190,13 +186,13 @@ plot_barchart_UI <- function(id,
                 label = "Width",
                 step = 10,
                 width = "100%",
-                value = barchart_width
+                value = ""
               ),
               numericInput(NS(id, "barchart_height"),
                 label = "Height",
                 step = 10,
                 width = "100%",
-                value = barchart_height
+                value = ""
               )
             ),
             actionButton(NS(id, "toggle_theme_options"),
@@ -235,19 +231,19 @@ plot_barchart_UI <- function(id,
               prettyCheckbox(NS(id, "barchart_showcode"),
                 label = "show/hide",
                 status = "info",
-                value = barchart_showcode
+                value = FALSE
               )
             )
           )
         ),
         div(
           class = "result-view",
-          fluidRow(actionButton(NS(id, "barchart_rmv"),
-            class = "child",
-            label = NULL,
-            icon = icon("fas fa-times"),
-            value = barchart_rmv
-          )),
+       #   fluidRow(actionButton(NS(id, "barchart_rmv"),
+       #     class = "child",
+       #     label = NULL,
+       #     icon = icon("fas fa-times"),
+       #     value = barchart_rmv
+       #   )),
           fluidRow(plotOutput(NS(id, "barchart_plot"), width = "auto", height = "auto")),
           fluidRow(verbatimTextOutput(NS(id, "barchart_text")) %>%
             tagAppendAttributes(class = "codeoutput"))
@@ -293,7 +289,7 @@ plot_barchart_SE <- function(id) {
       )
 
 
-    })
+    }, ignoreInit = TRUE)
 
     observe({
       updateSelectInput(
@@ -404,11 +400,11 @@ plot_barchart_SE <- function(id) {
 
 
 
-    observeEvent(input$barchart_rmv, {
-      removeUI(
-        selector = paste0("#", ns("placeholder1"))
-      )
-    })
+  #  observeEvent(input$barchart_rmv, {
+  #    removeUI(
+  #      selector = paste0("#", ns("placeholder1"))
+  #    )
+  #  })
 
 
     observeEvent(input$toggle_plot_options,
@@ -802,4 +798,4 @@ shinyApp(ui, server)
 
 }
 
-plot_barchart(mtcars, barchart_shape = mtcars$cyl)
+plot_barchart(mtcars)
