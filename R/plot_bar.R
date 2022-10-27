@@ -1,6 +1,6 @@
 
 
-#' Plot - Barchart
+#' Plot - bar
 #' @param data data
 #' @import shiny
 #' @import ggplot2
@@ -10,13 +10,13 @@
 #' launching a shiny application.
 #' @examples
 #' if (interactive()) {
-#'   plot_barchart(mtcars)
+#'   plot_bar(mtcars)
 #' }
 #' @export
 
 
 
-plot_barchart <- function(data, yvar, theme, group, code, shape, size, position, labels, row, prop, column, title, subtitle, xlab, ylab, caption) {
+plot_bar <- function(data, yvar, theme, group, code, shape, size, position, labels, row, prop, column, title, subtitle, xlab, ylab, caption) {
 
 
 
@@ -40,24 +40,24 @@ plot_barchart <- function(data, yvar, theme, group, code, shape, size, position,
 
 
 
-plot_barchart_UI <- function(id,
+plot_bar_UI <- function(id,
                              data,
-                             barchart_yvar = yvar,
-                             barchart_theme = theme,
-                             barchart_group = group,
-                             barchart_code = code,
-                             barchart_shape = shape,
-                             barchart_size = size,
-                             barchart_position = position,
-                             barchart_labels = labels,
-                             barchart_wraprow = row,
-                             barchart_prop = prop,
-                             barchart_wrapcol = column,
-                             barchart_title = title,
-                             barchart_subtitle = subtitle,
-                             barchart_xlab = xlab,
-                             barchart_ylab = ylab,
-                             barchart_caption = caption
+                             bar_yvar = yvar,
+                             bar_theme = theme,
+                             bar_group = group,
+                             bar_code = code,
+                             bar_shape = shape,
+                             bar_size = size,
+                             bar_position = position,
+                             bar_labels = labels,
+                             bar_wraprow = row,
+                             bar_prop = prop,
+                             bar_wrapcol = column,
+                             bar_title = title,
+                             bar_subtitle = subtitle,
+                             bar_xlab = xlab,
+                             bar_ylab = ylab,
+                             bar_caption = caption
                           ) {
   ns <- NS(id)
   tagList(
@@ -74,7 +74,7 @@ plot_barchart_UI <- function(id,
               div("Bar", class = "module-name"),
               div(
                 class = "cont2",
-                switchInput(NS(id, "barchart_instantlocal"),
+                switchInput(NS(id, "bar_instantlocal"),
                   label = "",
                   value = TRUE,
                   size = "mini",
@@ -84,94 +84,94 @@ plot_barchart_UI <- function(id,
               ),
               div(
                 class = "cont3",
-                actionButton(NS(id, "barchart_run"),
+                actionButton(NS(id, "bar_run"),
                   class = "btn-play",
                   label = icon(name = "fas fa-play", lib = "font-awesome")
                 )
               ),
             ),
-            selectInput(NS(id, "barchart_yvar"),
+            selectInput(NS(id, "bar_yvar"),
               label = "Y",
               choices = c("", names(data)),
-              selected = barchart_yvar
+              selected = bar_yvar
             ),
-            selectInput(NS(id, "barchart_shape"),
+            selectInput(NS(id, "bar_shape"),
               label = "Fill",
               choices = c("", names(data)),
-              selected = barchart_shape
+              selected = bar_shape
             ),
-            selectizeInput(NS(id, "barchart_size"),
+            selectizeInput(NS(id, "bar_size"),
               label = "Outline",
               choices = c("", names(data)),
-              selected = barchart_size,
+              selected = bar_size,
               options = list(create = TRUE)
             ),
-            radioButtons(NS(id, "barchart_position"),
+            radioButtons(NS(id, "bar_position"),
               label = "Position",
               choices = c("none", "stack", "dodge", "dodge2", "fill"),
-              selected = barchart_position,
+              selected = bar_position,
               inline = TRUE # )
             ),
-            radioButtons(NS(id, "barchart_labels"),
+            radioButtons(NS(id, "bar_labels"),
               label = "Data Labels",
               choices = c("none", "count", "percent"),
-              selected = barchart_labels,
+              selected = bar_labels,
               inline = TRUE
             ),
-            selectInput(NS(id, "barchart_prop"),
+            selectInput(NS(id, "bar_prop"),
               label = "Proportion by: ",
               choices = "",
-              selected = barchart_prop,
+              selected = bar_prop,
             ),
-            numericInput(NS(id, "barchart_group"),
+            numericInput(NS(id, "bar_group"),
               label = "Bar width",
               step = 0.1,
-              value = barchart_group
+              value = bar_group
             ),
-            actionButton(NS(id, "toggle_barchart_facet"),
+            actionButton(NS(id, "toggle_bar_facet"),
               width = "100%",
               class = "module-style",
               label = "Facet",
               icon = icon("fas fa-caret-down")
             ),
             hidden(
-              selectInput(NS(id, "barchart_wraprow"),
+              selectInput(NS(id, "bar_wraprow"),
                 label = "Row",
                 choices = c("", names(data)),
-                selected = barchart_wraprow
+                selected = bar_wraprow
               ),
-              selectInput(NS(id, "barchart_wrapcol"),
+              selectInput(NS(id, "bar_wrapcol"),
                 label = "Column",
                 choices = c("", names(data)),
-                selected = barchart_wrapcol
+                selected = bar_wrapcol
               )
             ),
-            actionButton(NS(id, "toggle_barchart_text"),
+            actionButton(NS(id, "toggle_bar_text"),
               width = "100%",
               class = "module-style",
               label = "Text",
               icon = icon("fas fa-caret-down")
             ),
             hidden(
-              textInput(NS(id, "barchart_title"),
+              textInput(NS(id, "bar_title"),
                 label = "Title",
-                value = barchart_title
+                value = bar_title
               ),
-              textInput(NS(id, "barchart_subtitle"),
+              textInput(NS(id, "bar_subtitle"),
                 label = "Subtitle",
-                value = barchart_subtitle
+                value = bar_subtitle
               ),
-              textInput(NS(id, "barchart_caption"),
+              textInput(NS(id, "bar_caption"),
                 label = "Caption",
-                value = barchart_caption
+                value = bar_caption
               ),
-              textInput(NS(id, "barchart_xlab"),
+              textInput(NS(id, "bar_xlab"),
                 label = "X-axis label",
-                value = barchart_xlab
+                value = bar_xlab
               ),
-              textInput(NS(id, "barchart_ylab"),
+              textInput(NS(id, "bar_ylab"),
                 label = "Y-axis label",
-                value = barchart_ylab
+                value = bar_ylab
               )
             ),
             actionButton(NS(id, "toggle_plot_options"),
@@ -181,13 +181,13 @@ plot_barchart_UI <- function(id,
               icon = icon("fas fa-caret-down")
             ),
             hidden(
-              numericInput(NS(id, "barchart_width"),
+              numericInput(NS(id, "bar_width"),
                 label = "Width",
                 step = 10,
                 width = "100%",
                 value = ""
               ),
-              numericInput(NS(id, "barchart_height"),
+              numericInput(NS(id, "bar_height"),
                 label = "Height",
                 step = 10,
                 width = "100%",
@@ -201,9 +201,9 @@ plot_barchart_UI <- function(id,
               icon = icon("fas fa-caret-down")
             ),
             hidden(
-              selectInput(NS(id, "barchart_theme"),
+              selectInput(NS(id, "bar_theme"),
                 label = "Theme",
-                selected = barchart_theme,
+                selected = bar_theme,
                 choices = c("",
                   `Black & White` = "theme_bw",
                   `Minimal` = "theme_minimal",
@@ -216,18 +216,18 @@ plot_barchart_UI <- function(id,
                 )
               )
             ),
-            actionButton(NS(id, "toggle_barchart_add_code"),
+            actionButton(NS(id, "toggle_bar_add_code"),
               width = "100%",
               class = "module-style",
               label = "Code",
               icon = icon("fas fa-caret-down")
             ),
             hidden(
-              textAreaInput(NS(id, "barchart_code"),
-                value = barchart_code,
+              textAreaInput(NS(id, "bar_code"),
+                value = bar_code,
                 label = NULL
               ),
-              prettyCheckbox(NS(id, "barchart_showcode"),
+              prettyCheckbox(NS(id, "bar_showcode"),
                 label = "show/hide",
                 status = "info",
                 value = FALSE
@@ -237,8 +237,8 @@ plot_barchart_UI <- function(id,
         ),
         div(
           class = "result-view",
-          fluidRow(plotOutput(NS(id, "barchart_plot"), width = "auto", height = "auto")),
-          fluidRow(verbatimTextOutput(NS(id, "barchart_text")) %>%
+          fluidRow(plotOutput(NS(id, "bar_plot"), width = "auto", height = "auto")),
+          fluidRow(verbatimTextOutput(NS(id, "bar_text")) %>%
             tagAppendAttributes(class = "codeoutput"))
         )
       )
@@ -246,38 +246,38 @@ plot_barchart_UI <- function(id,
   )
 }
 
-plot_barchart_SE <- function(id) {
+plot_bar_SE <- function(id) {
   moduleServer(id, function(input, output, session) {
     req(data)
 
     observeEvent(data, {
       updateSelectInput(
         session,
-        "barchart_yvar",
+        "bar_yvar",
         choices = c("", names(data))
       )
 
       updateSelectInput(
         session,
-        "barchart_shape",
+        "bar_shape",
         choices = c("", names(data))
       )
 
       updateSelectizeInput(
         session,
-        "barchart_size",
+        "bar_size",
         choices = c("", names(data))
       )
 
       updateSelectInput(
         session,
-        "barchart_wraprow",
+        "bar_wraprow",
         choices = c("", names(data))
       )
 
       updateSelectInput(
         session,
-        "barchart_wrapcol",
+        "bar_wrapcol",
         choices = c("", names(data))
       )
 
@@ -287,57 +287,57 @@ plot_barchart_SE <- function(id) {
     observe({
       updateSelectInput(
         session,
-        "barchart_prop",
-        choices = c(input$barchart_shape, input$barchart_yvar, "1")
+        "bar_prop",
+        choices = c(input$bar_shape, input$bar_yvar, "1")
       )
     })
 
 
-    observeEvent(input$barchart_instantlocal, {
-      if (input$barchart_instantlocal == TRUE) {
-        removeClass("barchart_run", "toggle-btnplay")
+    observeEvent(input$bar_instantlocal, {
+      if (input$bar_instantlocal == TRUE) {
+        removeClass("bar_run", "toggle-btnplay")
       } else {
-        addClass("barchart_run", "toggle-btnplay")
+        addClass("bar_run", "toggle-btnplay")
       }
     })
 
 
-    observeEvent(input$toggle_barchart_facet, {
-      toggle("barchart_wraprow")
-      toggle("barchart_wrapcol")
+    observeEvent(input$toggle_bar_facet, {
+      toggle("bar_wraprow")
+      toggle("bar_wrapcol")
 
-      if (input$toggle_barchart_facet %% 2 == 1) {
+      if (input$toggle_bar_facet %% 2 == 1) {
         updateActionButton(
           session,
-          "toggle_barchart_facet",
+          "toggle_bar_facet",
           icon = icon("fas fa-caret-up")
         )
       } else {
         updateActionButton(
           session,
-          "toggle_barchart_facet",
+          "toggle_bar_facet",
           icon = icon("fas fa-caret-down")
         )
       }
     })
 
-    observeEvent(input$toggle_barchart_text, {
-      toggle("barchart_title")
-      toggle("barchart_subtitle")
-      toggle("barchart_caption")
-      toggle("barchart_xlab")
-      toggle("barchart_ylab")
+    observeEvent(input$toggle_bar_text, {
+      toggle("bar_title")
+      toggle("bar_subtitle")
+      toggle("bar_caption")
+      toggle("bar_xlab")
+      toggle("bar_ylab")
 
-      if (input$toggle_barchart_text %% 2 == 1) {
+      if (input$toggle_bar_text %% 2 == 1) {
         updateActionButton(
           session,
-          "toggle_barchart_text",
+          "toggle_bar_text",
           icon = icon("fas fa-caret-up")
         )
       } else {
         updateActionButton(
           session,
-          "toggle_barchart_text",
+          "toggle_bar_text",
           icon = icon("fas fa-caret-down")
         )
       }
@@ -345,7 +345,7 @@ plot_barchart_SE <- function(id) {
 
 
     observeEvent(input$toggle_theme_options, {
-      toggle("barchart_theme")
+      toggle("bar_theme")
 
       if (input$toggle_theme_options %% 2 == 1) {
         updateActionButton(
@@ -364,28 +364,28 @@ plot_barchart_SE <- function(id) {
 
 
     width <- reactive({
-      if (is.na(input$barchart_width)) {
+      if (is.na(input$bar_width)) {
         return(600)
       } else {
-        input$barchart_width
+        input$bar_width
       }
     })
 
 
     height <- reactive({
-      if (is.na(input$barchart_height)) {
+      if (is.na(input$bar_height)) {
         return(400)
       } else {
-        input$barchart_height
+        input$bar_height
       }
     })
 
 
     barwidth <- reactive({
-      if (is.na(input$barchart_group)) {
+      if (is.na(input$bar_group)) {
         return(1)
       } else {
-        input$barchart_width
+        input$bar_width
       }
     })
 
@@ -394,8 +394,8 @@ plot_barchart_SE <- function(id) {
 
     observeEvent(input$toggle_plot_options,
       {
-        toggle("barchart_width")
-        toggle("barchart_height")
+        toggle("bar_width")
+        toggle("bar_height")
 
         if (input$toggle_plot_options %% 2 == 1) {
           updateActionButton(
@@ -415,22 +415,22 @@ plot_barchart_SE <- function(id) {
     )
 
 
-    observeEvent(input$toggle_barchart_add_code, {
+    observeEvent(input$toggle_bar_add_code, {
 
-      toggle("barchart_showcode")
+      toggle("bar_showcode")
 
-      toggle("barchart_code")
+      toggle("bar_code")
 
-      if (input$toggle_barchart_add_code %% 2 == 1) {
+      if (input$toggle_bar_add_code %% 2 == 1) {
         updateActionButton(
           session,
-          "toggle_barchart_add_code",
+          "toggle_bar_add_code",
           icon = icon("fas fa-caret-up")
         )
       } else {
         updateActionButton(
           session,
-          "toggle_barchart_add_code",
+          "toggle_bar_add_code",
           icon = icon("fas fa-caret-down")
         )
       }
@@ -441,29 +441,29 @@ plot_barchart_SE <- function(id) {
 
 
     code_text <- reactive({
-      req(isTruthy(input$barchart_yvar != ""))
+      req(isTruthy(input$bar_yvar != ""))
 
       code <- paste0(
         "\n \n ggplot(data, aes(",
-        if (input$barchart_yvar != "") {
-          paste0("y = factor(", input$barchart_yvar, ")")
+        if (input$bar_yvar != "") {
+          paste0("y = factor(", input$bar_yvar, ")")
         },
-        if (input$barchart_shape != "") {
-          paste0(", fill = factor(", input$barchart_shape, ")")
+        if (input$bar_shape != "") {
+          paste0(", fill = factor(", input$bar_shape, ")")
         } else {
 
         },
-        if ((input$barchart_shape != "" && input$barchart_position == "fill") || input$barchart_labels == "percent") {
-          if (input$barchart_shape == "") {
+        if ((input$bar_shape != "" && input$bar_position == "fill") || input$bar_labels == "percent") {
+          if (input$bar_shape == "") {
             paste0(", by = 1")
           } else {
-            paste0(", by = ", input$barchart_prop)
+            paste0(", by = ", input$bar_prop)
           }
         } else {
 
         },
-        if (input$barchart_size != "") {
-          paste0(", color = factor(", input$barchart_size, ")")
+        if (input$bar_size != "") {
+          paste0(", color = factor(", input$bar_size, ")")
         } else {
 
         },
@@ -471,22 +471,22 @@ plot_barchart_SE <- function(id) {
           "))"
         ),
         paste0(
-          if (input$barchart_labels == "percent") {
+          if (input$bar_labels == "percent") {
             " + \n    geom_bar(aes(x = ..prop..), stat = 'prop'"
           } else {
             " + \n    geom_bar(aes(x = ..count..), stat = 'count'"
           },
-          if (input$barchart_position != "None") {
+          if (input$bar_position != "None") {
             paste0(
               ", position = ", # "'",
 
-              if (input$barchart_position == "dodge") {
+              if (input$bar_position == "dodge") {
                 "position_dodge(preserve = 'single')"
-              } else if (input$barchart_position == "dodge2") {
+              } else if (input$bar_position == "dodge2") {
                 "position_dodge2(preserve = 'single')"
-              } else if (input$barchart_position == "fill") {
+              } else if (input$bar_position == "fill") {
                 "'fill'"
-              } else if (input$barchart_position == "stack") {
+              } else if (input$bar_position == "stack") {
                 "'stack'"
               } else {
 
@@ -494,8 +494,8 @@ plot_barchart_SE <- function(id) {
               #   "'"
             )
           },
-          if (!is.na(input$barchart_group)) {
-            paste0(", width = ", input$barchart_group)
+          if (!is.na(input$bar_group)) {
+            paste0(", width = ", input$bar_group)
           } else {
 
           },
@@ -505,8 +505,8 @@ plot_barchart_SE <- function(id) {
 
       code <- paste(
         code,
-        if (input$barchart_yvar != "" &&
-          input$barchart_shape == "") {
+        if (input$bar_yvar != "" &&
+          input$bar_shape == "") {
           paste()
         }
       )
@@ -514,21 +514,21 @@ plot_barchart_SE <- function(id) {
 
       code <- paste(
         code,
-        if (input$barchart_wraprow != "" &&
-          input$barchart_wrapcol != "") {
+        if (input$bar_wraprow != "" &&
+          input$bar_wrapcol != "") {
           paste0(
             "+ \n    facet_grid(",
-            input$barchart_wraprow, " ~ ", input$barchart_wrapcol, ")"
+            input$bar_wraprow, " ~ ", input$bar_wrapcol, ")"
           )
-        } else if (input$barchart_wrapcol != "") {
+        } else if (input$bar_wrapcol != "") {
           paste0(
             "+ \n    facet_grid(. ~ ",
-            input$barchart_wrapcol, ")"
+            input$bar_wrapcol, ")"
           )
-        } else if (input$barchart_wraprow != "") {
+        } else if (input$bar_wraprow != "") {
           paste0(
             "+ \n    facet_grid(",
-            input$barchart_wraprow,
+            input$bar_wraprow,
             " ~ . )"
           )
         }
@@ -537,10 +537,10 @@ plot_barchart_SE <- function(id) {
 
       code <- paste(
         code,
-        if (input$barchart_title != "") {
+        if (input$bar_title != "") {
           paste0(
             "+ \n    labs(title = '",
-            input$barchart_title,
+            input$bar_title,
             "')"
           )
         }
@@ -550,10 +550,10 @@ plot_barchart_SE <- function(id) {
 
       code <- paste(
         code,
-        if (input$barchart_subtitle != "") {
+        if (input$bar_subtitle != "") {
           paste0(
             "+ \n    labs(subtitle = '",
-            input$barchart_subtitle, "')"
+            input$bar_subtitle, "')"
           )
         }
       )
@@ -561,20 +561,20 @@ plot_barchart_SE <- function(id) {
 
       code <- paste(
         code,
-        if (input$barchart_caption != "") {
+        if (input$bar_caption != "") {
           paste0(
             "+ \n    labs(caption = '",
-            input$barchart_caption, "')"
+            input$bar_caption, "')"
           )
         }
       )
 
       code <- paste(
         code,
-        if (input$barchart_xlab != "") {
+        if (input$bar_xlab != "") {
           paste0(
             "+ \n    labs(x = '",
-            input$barchart_xlab, "')"
+            input$bar_xlab, "')"
           )
         }
       )
@@ -582,10 +582,10 @@ plot_barchart_SE <- function(id) {
 
       code <- paste(
         code,
-        if (input$barchart_ylab != "") {
+        if (input$bar_ylab != "") {
           paste0(
             "+ \n    labs(y = '",
-            input$barchart_ylab, "')"
+            input$bar_ylab, "')"
           )
         }
       )
@@ -593,66 +593,66 @@ plot_barchart_SE <- function(id) {
 
       code <- paste(
         code,
-        if (input$barchart_position != "fill") {
-          if (input$barchart_labels == "count") {
+        if (input$bar_position != "fill") {
+          if (input$bar_labels == "count") {
             paste0(
               "+ \n    geom_text(aes(",
               "label = ..count..), stat = 'count'",
-              if (input$barchart_position == "stack") {
+              if (input$bar_position == "stack") {
                 ", position = 'stack'"
-              } else if (input$barchart_position == "dodge") {
+              } else if (input$bar_position == "dodge") {
                 paste0(
                   ", position = position_dodge(",
-                  if (!is.na(input$barchart_group)) {
-                    paste0("width = ", input$barchart_group)
+                  if (!is.na(input$bar_group)) {
+                    paste0("width = ", input$bar_group)
                   } else {
                     paste0("width = 1")
                   },
                   ")"
                 )
-              } else if (input$barchart_position == "dodge2") {
+              } else if (input$bar_position == "dodge2") {
                 paste0(
                   ", position = position_dodge2(",
-                  if (!is.na(input$barchart_group)) {
-                    paste0("width = ", input$barchart_group)
+                  if (!is.na(input$bar_group)) {
+                    paste0("width = ", input$bar_group)
                   } else {
                     paste0("width = 1")
                   },
                   ")"
                 )
-              } else if (input$barchart_position == "fill") {
+              } else if (input$bar_position == "fill") {
                 ", position = 'fill'"
               } else {
                 #      ")"
               }, ")"
             )
-          } else if (input$barchart_labels == "percent") {
+          } else if (input$bar_labels == "percent") {
             paste0(
               "+ \n    geom_text(aes(",
               "x = ..prop..), stat = 'prop'",
-              if (input$barchart_position == "stack") {
+              if (input$bar_position == "stack") {
                 ", position = 'stack'"
-              } else if (input$barchart_position == "dodge") {
+              } else if (input$bar_position == "dodge") {
                 paste0(
                   ", position = position_dodge(",
-                  if (!is.na(input$barchart_group)) {
-                    paste0("width = ", input$barchart_group)
+                  if (!is.na(input$bar_group)) {
+                    paste0("width = ", input$bar_group)
                   } else {
                     paste0("width = 1")
                   },
                   ")"
                 )
-              } else if (input$barchart_position == "dodge2") {
+              } else if (input$bar_position == "dodge2") {
                 paste0(
                   ", position = position_dodge2(",
-                  if (!is.na(input$barchart_group)) {
-                    paste0("width = ", input$barchart_group)
+                  if (!is.na(input$bar_group)) {
+                    paste0("width = ", input$bar_group)
                   } else {
                     paste0("width = 1")
                   },
                   ")"
                 )
-              } else if (input$barchart_position == "fill") {
+              } else if (input$bar_position == "fill") {
                 ", position = 'fill'"
               } else {
                 #      ")"
@@ -669,8 +669,8 @@ plot_barchart_SE <- function(id) {
 
       code <- paste(
         code,
-        if (input$barchart_position == "fill") {
-          if (input$barchart_labels == "percent") {
+        if (input$bar_position == "fill") {
+          if (input$bar_labels == "percent") {
             paste0(
               "+ \n    geom_text(stat = 'prop', position = position_fill()) "
             )
@@ -683,10 +683,10 @@ plot_barchart_SE <- function(id) {
 
       code <- paste(
         code,
-        if (input$barchart_theme != "") {
+        if (input$bar_theme != "") {
           paste0(
             "+ \n    ",
-            input$barchart_theme, "()"
+            input$bar_theme, "()"
           )
         }
       )
@@ -694,18 +694,18 @@ plot_barchart_SE <- function(id) {
 
       code <- paste0(
         code,
-        paste0(input$barchart_code)
+        paste0(input$bar_code)
       )
 
       code
     })
 
     run <- reactive({
-      input$barchart_run
+      input$bar_run
     })
 
     code_text2 <- reactive({
-      if (input$barchart_instantlocal) {
+      if (input$bar_instantlocal) {
         code_text()
       } else {
         req(run())
@@ -714,7 +714,7 @@ plot_barchart_SE <- function(id) {
     })
 
 
-    output$barchart_plot <- renderPlot(
+    output$bar_plot <- renderPlot(
       {
         eval(parse(text = code_text2()))
       },
@@ -723,18 +723,18 @@ plot_barchart_SE <- function(id) {
     )
 
 
-    mod_id <- paste0(id, "-barchart_")
+    mod_id <- paste0(id, "-bar_")
 
-    observeEvent(input$barchart_showcode, {
-      if (input$barchart_showcode == "TRUE") {
+    observeEvent(input$bar_showcode, {
+      if (input$bar_showcode == "TRUE") {
         runjs(paste0('$("#', mod_id, 'text").css({"visibility":"visible"})'))
       }
-      if (input$barchart_showcode == "FALSE") {
+      if (input$bar_showcode == "FALSE") {
         runjs(paste0('$("#', mod_id, 'text").css({"visibility":"hidden"})'))
       }
     })
 
-    output$barchart_text <- renderText({
+    output$bar_text <- renderText({
       code_text2()
     })
   })
@@ -771,10 +771,10 @@ ui <- fluidPage(
     )
   ),
   theme = bslib::bs_theme(),
-  plot_barchart_UI("module", data)
+  plot_bar_UI("module", data)
 )
 server <- function(input, output, session) {
-  plot_barchart_SE("module")
+  plot_bar_SE("module")
 }
 
 
@@ -783,4 +783,4 @@ shinyApp(ui, server)
 
 }
 
-plot_barchart(mtcars, yvar = cyl)
+plot_bar(mtcars, yvar = cyl)

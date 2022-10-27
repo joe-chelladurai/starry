@@ -1,7 +1,7 @@
 
 plot_histogram <- function(data, xvar, fill, outline, row, column, width, height, title, subtitle, xlab, ylab, caption, theme, code, show_code){
 
-  if (missing(xvar)) {xvar = ""} else {yvar = deparse(substitute(xvar))}
+  if (missing(xvar)) {xvar = ""} else {xvar = deparse(substitute(xvar))}
   if (missing(fill)) {fill = ""} else {fill = deparse(substitute(fill))}
   if (missing(outline)) {outline = ""} else {outline = deparse(substitute(outline))}
   if (missing(row)) {row = ""} else {row = deparse(substitute(row))}
@@ -18,8 +18,9 @@ plot_histogram <- function(data, xvar, fill, outline, row, column, width, height
   if (missing(show_code)) {show_code = FALSE}
 
 
+
+
 plot_histogram_ui <- function(id,
-                              data,
                             histogram_xvar = xvar,
                             histogram_fill = fill,
                             histogram_outline = outline,
@@ -539,7 +540,7 @@ ui <- fluidPage(
     )
   ),
   theme = bslib::bs_theme(),
-  plot_histogram_ui("module", data)
+  plot_histogram_ui("module")
 )
 server <- function(input, output, session) {
   plot_histogram_se("module")

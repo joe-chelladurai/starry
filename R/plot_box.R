@@ -1,7 +1,7 @@
 
-plot_boxplot <- function(data, xvar, yvar, theme, group, code, shape, size, row, column, width, height, title, subtitle, xlab, ylab, caption, show_code){
+plot_box <- function(data, xvar, yvar, theme, group, code, shape, size, row, column, width, height, title, subtitle, xlab, ylab, caption, show_code){
 
-  if (missing(xvar)) {xvar = ""} else {yvar = deparse(substitute(xvar))}
+  if (missing(xvar)) {xvar = ""} else {xvar = deparse(substitute(xvar))}
   if (missing(yvar)) {yvar = ""} else {yvar = deparse(substitute(yvar))}
   if (missing(shape)) {shape = ""} else {shape = deparse(substitute(shape))}
   if (missing(group)) {group = ""} else {group = deparse(substitute(group))}
@@ -24,25 +24,25 @@ plot_boxplot <- function(data, xvar, yvar, theme, group, code, shape, size, row,
 
 
 
-plot_boxplot_ui <- function(id,
+plot_box_ui <- function(id,
                             data,
-                            boxplot_xvar = xvar,
-                            boxplot_yvar = yvar,
-                            boxplot_theme = theme,
-                            boxplot_group = group,
-                            boxplot_code = code,
-                            boxplot_shape = shape,
-                            boxplot_size = size,
-                            boxplot_wraprow = row,
-                            boxplot_wrapcol = column,
-                            boxplot_width = width,
-                            boxplot_height = height,
-                            boxplot_title = title,
-                            boxplot_subtitle = subtitle,
-                            boxplot_xlab = xlab,
-                            boxplot_ylab = ylab,
-                            boxplot_caption = caption,
-                            boxplot_showcode = show_code) {
+                            box_xvar = xvar,
+                            box_yvar = yvar,
+                            box_theme = theme,
+                            box_group = group,
+                            box_code = code,
+                            box_shape = shape,
+                            box_size = size,
+                            box_wraprow = row,
+                            box_wrapcol = column,
+                            box_width = width,
+                            box_height = height,
+                            box_title = title,
+                            box_subtitle = subtitle,
+                            box_xlab = xlab,
+                            box_ylab = ylab,
+                            box_caption = caption,
+                            box_showcode = show_code) {
   ns <- NS(id)
   tagList(
     div(
@@ -63,81 +63,81 @@ plot_boxplot_ui <- function(id,
                 onLabel = "",
                 offLabel = "",
               )),
-              div(class = "cont3", actionButton(NS(id, "boxplot_run"),
+              div(class = "cont3", actionButton(NS(id, "box_run"),
                 class = "btn-play",
                 label = icon(name = "fas fa-play", lib = "font-awesome")
               ))
             ),
-            selectizeInput(NS(id, "boxplot_yvar"),
+            selectizeInput(NS(id, "box_yvar"),
               label = "Y",
               choices = c("", names(data)),
-              selected = boxplot_yvar
+              selected = box_yvar
             ),
-            selectInput(NS(id, "boxplot_xvar"),
+            selectInput(NS(id, "box_xvar"),
               label = "X",
               choices = c("", names(data)),
-              selected = boxplot_xvar
+              selected = box_xvar
             ),
-            selectInput(NS(id, "boxplot_shape"),
+            selectInput(NS(id, "box_shape"),
               label = "Fill",
               choices = c(" ", names(data)),
-              selected = boxplot_shape
+              selected = box_shape
             ),
-            selectizeInput(NS(id, "boxplot_size"),
+            selectizeInput(NS(id, "box_size"),
               label = "Outline",
               choices = c(" ", names(data)),
-              selected = boxplot_size,
+              selected = box_size,
               options = list(create = TRUE)
             ),
-            numericInput(NS(id, "boxplot_group"),
+            numericInput(NS(id, "box_group"),
               label = "Box width",
               step = 0.1,
-              value = boxplot_group
+              value = box_group
             ),
-            actionButton(NS(id, "toggle_boxplot_facet"),
+            actionButton(NS(id, "toggle_box_facet"),
               width = "100%",
               class = "module-style",
               label = "Facet",
               icon = icon("fas fa-caret-down")
             ),
             hidden(
-              selectInput(NS(id, "boxplot_wraprow"),
+              selectInput(NS(id, "box_wraprow"),
                 label = "Row",
                 choices = c(" ", names(data)),
-                selected = boxplot_wraprow
+                selected = box_wraprow
               ),
-              selectInput(NS(id, "boxplot_wrapcol"),
+              selectInput(NS(id, "box_wrapcol"),
                 label = "Column",
                 choices = c(" ", names(data)),
-                selected = boxplot_wrapcol
+                selected = box_wrapcol
               )
             ),
-            actionButton(NS(id, "toggle_boxplot_text"),
+            actionButton(NS(id, "toggle_box_text"),
               width = "100%",
               class = "module-style",
               label = "Text",
               icon = icon("fas fa-caret-down")
             ),
             hidden(
-              textInput(NS(id, "boxplot_title"),
+              textInput(NS(id, "box_title"),
                 label = "Title",
-                value = boxplot_title
+                value = box_title
               ),
-              textInput(NS(id, "boxplot_subtitle"),
+              textInput(NS(id, "box_subtitle"),
                 label = "Subtitle",
-                value = boxplot_subtitle
+                value = box_subtitle
               ),
-              textInput(NS(id, "boxplot_caption"),
+              textInput(NS(id, "box_caption"),
                 label = "Caption",
-                value = boxplot_caption
+                value = box_caption
               ),
-              textInput(NS(id, "boxplot_xlab"),
+              textInput(NS(id, "box_xlab"),
                 label = "X-axis label",
-                value = boxplot_xlab
+                value = box_xlab
               ),
-              textInput(NS(id, "boxplot_ylab"),
+              textInput(NS(id, "box_ylab"),
                 label = "Y-axis label",
-                value = boxplot_ylab
+                value = box_ylab
               )
             ),
             actionButton(NS(id, "toggle_plot_options"),
@@ -147,17 +147,17 @@ plot_boxplot_ui <- function(id,
               icon = icon("fas fa-caret-down")
             ),
             hidden(
-              numericInput(NS(id, "boxplot_width"),
+              numericInput(NS(id, "box_width"),
                 label = "Width",
                 step = 10,
                 width = "100%",
-                value = boxplot_width
+                value = box_width
               ),
-              numericInput(NS(id, "boxplot_height"),
+              numericInput(NS(id, "box_height"),
                 label = "Height",
                 step = 10,
                 width = "100%",
-                value = boxplot_height
+                value = box_height
               )
             ),
             actionButton(NS(id, "toggle_theme_options"),
@@ -167,9 +167,9 @@ plot_boxplot_ui <- function(id,
               icon = icon("fas fa-caret-down")
             ),
             hidden(
-              selectInput(NS(id, "boxplot_theme"),
+              selectInput(NS(id, "box_theme"),
                 label = "Theme",
-                selected = boxplot_theme,
+                selected = box_theme,
                 choices = c(" ",
                   `Black & White` = "theme_bw",
                   `Minimal` = "theme_minimal",
@@ -182,21 +182,21 @@ plot_boxplot_ui <- function(id,
                 )
               )
             ),
-            actionButton(NS(id, "toggle_boxplot_add_code"),
+            actionButton(NS(id, "toggle_box_add_code"),
               width = "100%",
               class = "module-style",
               label = "Code",
               icon = icon("fas fa-caret-down")
             ),
             hidden(
-              textAreaInput(NS(id, "boxplot_code"),
-                value = boxplot_code,
+              textAreaInput(NS(id, "box_code"),
+                value = box_code,
                 label = NULL
               ),
-              prettyCheckbox(NS(id, "boxplot_showcode"),
+              prettyCheckbox(NS(id, "box_showcode"),
                 label = "show/hide",
                 status = "info",
-                value = boxplot_showcode
+                value = box_showcode
               )
             )
           )
@@ -204,8 +204,8 @@ plot_boxplot_ui <- function(id,
         div(
           class = "result-view",
 
-          fluidRow(plotOutput(NS(id, "boxplot_plot"), width = "auto", height = "auto")),
-          fluidRow(verbatimTextOutput(NS(id, "boxplot_text")) %>%
+          fluidRow(plotOutput(NS(id, "box_plot"), width = "auto", height = "auto")),
+          fluidRow(verbatimTextOutput(NS(id, "box_text")) %>%
             tagAppendAttributes(class = "codeoutput"))
         )
       )
@@ -213,51 +213,51 @@ plot_boxplot_ui <- function(id,
   )
 }
 
-plot_boxplot_se <- function(id) {
+plot_box_se <- function(id) {
   moduleServer(id, function(input, output, session) {
     req(data)
 
     observeEvent(data, {
       updateSelectizeInput(
         session,
-        "boxplot_xvar",
+        "box_xvar",
         choices = c("", names(data))
       )
 
       updateSelectInput(
         session,
-        "boxplot_yvar",
+        "box_yvar",
         choices = c("", names(data))
       )
 
       updateSelectInput(
         session,
-        "boxplot_shape",
+        "box_shape",
         choices = c(" ", names(data))
       )
 
       updateSelectizeInput(
         session,
-        "boxplot_size",
+        "box_size",
         choices = c(" ", names(data))
       )
 
       updateSelectInput(
         session,
-        "boxplot_wraprow",
+        "box_wraprow",
         choices = c(" ", names(data))
       )
 
       updateSelectInput(
         session,
-        "boxplot_wrapcol",
+        "box_wrapcol",
         choices = c(" ", names(data))
       )
 
-      if (!is.null(input$boxplot_showcode)) {
+      if (!is.null(input$box_showcode)) {
         updatePrettyCheckbox(
           session,
-          "boxplot_showcode",
+          "box_showcode",
           value = TRUE
         )
       }
@@ -265,49 +265,49 @@ plot_boxplot_se <- function(id) {
 
     observeEvent(input$instantlocal, {
       if (input$instantlocal == TRUE) {
-        removeClass("boxplot_run", "toggle-btnplay")
+        removeClass("box_run", "toggle-btnplay")
       } else {
-        addClass("boxplot_run", "toggle-btnplay")
+        addClass("box_run", "toggle-btnplay")
       }
     })
 
 
-    observeEvent(input$toggle_boxplot_facet, {
-      toggle("boxplot_wraprow")
-      toggle("boxplot_wrapcol")
+    observeEvent(input$toggle_box_facet, {
+      toggle("box_wraprow")
+      toggle("box_wrapcol")
 
-      if (input$toggle_boxplot_facet %% 2 == 1) {
+      if (input$toggle_box_facet %% 2 == 1) {
         updateActionButton(
           session,
-          "toggle_boxplot_facet",
+          "toggle_box_facet",
           icon = icon("fas fa-caret-up")
         )
       } else {
         updateActionButton(
           session,
-          "toggle_boxplot_facet",
+          "toggle_box_facet",
           icon = icon("fas fa-caret-down")
         )
       }
     })
 
-    observeEvent(input$toggle_boxplot_text, {
-      toggle("boxplot_title")
-      toggle("boxplot_subtitle")
-      toggle("boxplot_caption")
-      toggle("boxplot_xlab")
-      toggle("boxplot_ylab")
+    observeEvent(input$toggle_box_text, {
+      toggle("box_title")
+      toggle("box_subtitle")
+      toggle("box_caption")
+      toggle("box_xlab")
+      toggle("box_ylab")
 
-      if (input$toggle_boxplot_text %% 2 == 1) {
+      if (input$toggle_box_text %% 2 == 1) {
         updateActionButton(
           session,
-          "toggle_boxplot_text",
+          "toggle_box_text",
           icon = icon("fas fa-caret-up")
         )
       } else {
         updateActionButton(
           session,
-          "toggle_boxplot_text",
+          "toggle_box_text",
           icon = icon("fas fa-caret-down")
         )
       }
@@ -315,7 +315,7 @@ plot_boxplot_se <- function(id) {
 
 
     observeEvent(input$toggle_theme_options, {
-      toggle("boxplot_theme")
+      toggle("box_theme")
 
       if (input$toggle_theme_options %% 2 == 1) {
         updateActionButton(
@@ -334,28 +334,28 @@ plot_boxplot_se <- function(id) {
 
 
     width <- reactive({
-      if (is.na(input$boxplot_width)) {
+      if (is.na(input$box_width)) {
         return(600)
       } else {
-        input$boxplot_width
+        input$box_width
       }
     })
 
 
     height <- reactive({
-      if (is.na(input$boxplot_height)) {
+      if (is.na(input$box_height)) {
         return(400)
       } else {
-        input$boxplot_height
+        input$box_height
       }
     })
 
 
     boxwidth <- reactive({
-      if (is.na(input$boxplot_group)) {
+      if (is.na(input$box_group)) {
         return(1)
       } else {
-        input$boxplot_width
+        input$box_width
       }
     })
 
@@ -364,8 +364,8 @@ plot_boxplot_se <- function(id) {
 
     observeEvent(input$toggle_plot_options,
       {
-        toggle("boxplot_width")
-        toggle("boxplot_height")
+        toggle("box_width")
+        toggle("box_height")
 
         if (input$toggle_plot_options %% 2 == 1) {
           updateActionButton(
@@ -387,21 +387,21 @@ plot_boxplot_se <- function(id) {
 
 
 
-    observeEvent(input$toggle_boxplot_add_code, {
-      toggle("boxplot_showcode")
+    observeEvent(input$toggle_box_add_code, {
+      toggle("box_showcode")
 
-      toggle("boxplot_code")
+      toggle("box_code")
 
-      if (input$toggle_boxplot_add_code %% 2 == 1) {
+      if (input$toggle_box_add_code %% 2 == 1) {
         updateActionButton(
           session,
-          "toggle_boxplot_add_code",
+          "toggle_box_add_code",
           icon = icon("fas fa-caret-up")
         )
       } else {
         updateActionButton(
           session,
-          "toggle_boxplot_add_code",
+          "toggle_box_add_code",
           icon = icon("fas fa-caret-down")
         )
       }
@@ -410,29 +410,29 @@ plot_boxplot_se <- function(id) {
 
     code_text <- reactive({
       req(
-        isTruthy(input$boxplot_xvar != "") |
-          isTruthy(input$boxplot_yvar != "")
+        isTruthy(input$box_xvar != "") |
+          isTruthy(input$box_yvar != "")
       )
 
       t <- paste0(
         "\n \n ggplot(data, aes(",
-        if (input$boxplot_xvar != "") {
-          paste0("factor(", input$boxplot_xvar, ")")
+        if (input$box_xvar != "") {
+          paste0("factor(", input$box_xvar, ")")
         },
-        if (input$boxplot_yvar != "" && input$boxplot_xvar != "") {
-          paste0(", ", input$boxplot_yvar)
-        } else if (input$boxplot_yvar != "") {
-          paste0("y = ", input$boxplot_yvar)
+        if (input$box_yvar != "" && input$box_xvar != "") {
+          paste0(", ", input$box_yvar)
+        } else if (input$box_yvar != "") {
+          paste0("y = ", input$box_yvar)
         } else {
 
         },
-        if (input$boxplot_shape != " ") {
-          paste0(", fill = factor(", input$boxplot_shape, ")")
+        if (input$box_shape != " ") {
+          paste0(", fill = factor(", input$box_shape, ")")
         } else {
 
         },
-        if (input$boxplot_size != " ") {
-          paste0(", color = factor(", input$boxplot_size, ")")
+        if (input$box_size != " ") {
+          paste0(", color = factor(", input$box_size, ")")
         } else {
 
         },
@@ -440,9 +440,9 @@ plot_boxplot_se <- function(id) {
           "))"
         ),
         paste0(
-          " + \n    geom_boxplot(",
-          if (!is.na(input$boxplot_group)) {
-            paste0("width = ", input$boxplot_group)
+          " + \n    geom_box(",
+          if (!is.na(input$box_group)) {
+            paste0("width = ", input$box_group)
           } else {
 
           },
@@ -452,9 +452,9 @@ plot_boxplot_se <- function(id) {
 
       t <- paste(
         t,
-        if (input$boxplot_yvar != "" &&
-          input$boxplot_xvar == "" &&
-          input$boxplot_shape == " ") {
+        if (input$box_yvar != "" &&
+          input$box_xvar == "" &&
+          input$box_shape == " ") {
           paste(
             "+ \n    scale_x_discrete()"
           )
@@ -464,21 +464,21 @@ plot_boxplot_se <- function(id) {
 
       t <- paste(
         t,
-        if (input$boxplot_wraprow != " " &&
-          input$boxplot_wrapcol != " ") {
+        if (input$box_wraprow != " " &&
+          input$box_wrapcol != " ") {
           paste0(
             "+ \n    facet_grid(",
-            input$boxplot_wraprow, " ~ ", input$boxplot_wrapcol, ")"
+            input$box_wraprow, " ~ ", input$box_wrapcol, ")"
           )
-        } else if (input$boxplot_wrapcol != " ") {
+        } else if (input$box_wrapcol != " ") {
           paste0(
             "+ \n    facet_grid(. ~ ",
-            input$boxplot_wrapcol, ")"
+            input$box_wrapcol, ")"
           )
-        } else if (input$boxplot_wraprow != " ") {
+        } else if (input$box_wraprow != " ") {
           paste0(
             "+ \n    facet_grid(",
-            input$boxplot_wraprow,
+            input$box_wraprow,
             " ~ . )"
           )
         }
@@ -487,10 +487,10 @@ plot_boxplot_se <- function(id) {
 
       t <- paste(
         t,
-        if (input$boxplot_title != "") {
+        if (input$box_title != "") {
           paste0(
             "+ \n    labs(title = '",
-            input$boxplot_title,
+            input$box_title,
             "')"
           )
         }
@@ -500,10 +500,10 @@ plot_boxplot_se <- function(id) {
 
       t <- paste(
         t,
-        if (input$boxplot_subtitle != "") {
+        if (input$box_subtitle != "") {
           paste0(
             "+ \n    labs(subtitle = '",
-            input$boxplot_subtitle, "')"
+            input$box_subtitle, "')"
           )
         }
       )
@@ -511,20 +511,20 @@ plot_boxplot_se <- function(id) {
 
       t <- paste(
         t,
-        if (input$boxplot_caption != "") {
+        if (input$box_caption != "") {
           paste0(
             "+ \n    labs(caption = '",
-            input$boxplot_caption, "')"
+            input$box_caption, "')"
           )
         }
       )
 
       t <- paste(
         t,
-        if (input$boxplot_xlab != "") {
+        if (input$box_xlab != "") {
           paste0(
             "+ \n    labs(x = '",
-            input$boxplot_xlab, "')"
+            input$box_xlab, "')"
           )
         }
       )
@@ -532,10 +532,10 @@ plot_boxplot_se <- function(id) {
 
       t <- paste(
         t,
-        if (input$boxplot_ylab != "") {
+        if (input$box_ylab != "") {
           paste0(
             "+ \n    labs(y = '",
-            input$boxplot_ylab, "')"
+            input$box_ylab, "')"
           )
         }
       )
@@ -543,10 +543,10 @@ plot_boxplot_se <- function(id) {
 
       t <- paste(
         t,
-        if (input$boxplot_theme != " ") {
+        if (input$box_theme != " ") {
           paste0(
             "+ \n    ",
-            input$boxplot_theme, "()"
+            input$box_theme, "()"
           )
         }
       )
@@ -554,7 +554,7 @@ plot_boxplot_se <- function(id) {
 
       t <- paste0(
         t,
-        paste0(input$boxplot_code)
+        paste0(input$box_code)
       )
 
       t <- paste0(
@@ -567,7 +567,7 @@ plot_boxplot_se <- function(id) {
 
 
     run <- reactive({
-      input$boxplot_run
+      input$box_run
     })
 
     #  global <- reactive({
@@ -592,7 +592,7 @@ plot_boxplot_se <- function(id) {
 
 
 
-    output$boxplot_plot <- renderPlot(
+    output$box_plot <- renderPlot(
       {
         eval(parse(text = code_text2()))
       },
@@ -600,17 +600,17 @@ plot_boxplot_se <- function(id) {
       height = height,
     )
 
-    mod_id <- paste0(id, "-boxplot_")
+    mod_id <- paste0(id, "-box_")
 
-    observeEvent(input$boxplot_showcode, {
-      if (input$boxplot_showcode == "TRUE") {
+    observeEvent(input$box_showcode, {
+      if (input$box_showcode == "TRUE") {
         runjs(paste0('$("#', mod_id, 'text").css({"visibility":"visible"})'))
       }
-      if (input$boxplot_showcode == "FALSE") {
+      if (input$box_showcode == "FALSE") {
         runjs(paste0('$("#', mod_id, 'text").css({"visibility":"hidden"})'))
       }
     })
-    output$boxplot_text <- renderText({
+    output$box_text <- renderText({
       code_text2()
     })
   })
@@ -648,10 +648,10 @@ plot_boxplot_se <- function(id) {
       )
     ),
     theme = bslib::bs_theme(),
-    plot_boxplot_ui("module", data)
+    plot_box_ui("module", data)
   )
   server <- function(input, output, session) {
-    plot_boxplot_se("module")
+    plot_box_se("module")
   }
 
 
@@ -662,5 +662,5 @@ plot_boxplot_se <- function(id) {
 }
 
 
-plot_boxplot(mtcars)
+plot_box(mtcars)
 

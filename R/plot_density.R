@@ -9,7 +9,7 @@ plot_density <- function(data, xvar, fill, outline, row, column, height, width, 
 
 
 
-  if (missing(xvar)) {yvar = ""} else {yvar = deparse(substitute(xvar))}
+  if (missing(xvar)) {xvar = ""} else {xvar = deparse(substitute(xvar))}
   if (missing(fill)) {fill = ""} else {fill = deparse(substitute(fill))}
   if (missing(outline)) {outline = ""} else {outline = deparse(substitute(outline))}
   if (missing(height)) {height = NA}

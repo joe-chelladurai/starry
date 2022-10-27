@@ -1,15 +1,19 @@
 
+stat_t_test <- function(data, xvar, yvar, group, test, show_code) {
 
-ttestUI <- function(id,
-                    ttest_yvar,
-                    ttest_xvar,
-                    ttest_group,
-                    ttest_vartext,
-                    ttest_type,
-                    ttest_showcode,
-                    ttest_instant,
-                    ttest_run,
-                    ttest_rmv) {
+  if (missing(xvar)) {xvar = ""} else {xvar = deparse(substitute(xvar))}
+  if (missing(yvar)) {yvar = ""} else {yvar = deparse(substitute(yvar))}
+  if (missing(group)) {group = ""} else {group = deparse(substitute(group))}
+  if (missing(test)) {test = "Welsch"} else {test = deparse(substitute(test))}
+  if (missing(show_code)) {show_code = FALSE}
+
+
+stat_t_test_ui <- function(id,
+                    ttest_yvar = yvar,
+                    ttest_xvar = xvar,
+                    ttest_group = group,
+                    ttest_type = test,
+                    ttest_showcode = show_code) {
   ns <- NS(id)
 
   tagList(
@@ -52,7 +56,7 @@ ttestUI <- function(id,
             hidden(
               textInput(NS(id, "ttest_vartext"),
                 label = "Variables Text",
-                value = ttest_vartext
+                value = ""
               ),
               actionButton(NS(id, "updatebtn"), "Update")
             ),
@@ -63,14 +67,14 @@ ttestUI <- function(id,
                 delimiter = ",",
                 create = TRUE
               ),
-              selected = ttest_vartext,
+              selected = "",
               multiple = TRUE
             ),
             checkboxGroupInput(NS(id, "ttest_type"),
               label = NULL,
               choices = c("Welsch", "Student's"),
               selected = ttest_type,
-              inline = TRUE, 
+              inline = TRUE,
               width = "100%"
             ),
             actionButton(NS(id, "toggle_ttest_add_code"),
@@ -90,12 +94,7 @@ ttestUI <- function(id,
         ),
         div(
           class = "result-view",
-          fluidRow(actionButton(NS(id, "ttest_rmv"),
-            class = "child",
-            label = NULL,
-            icon = icon("fas fa-times"),
-            value = ttest_rmv
-          )),
+
           fluidRow(tableOutput(NS(id, "ttest_table"))),
           fluidRow(tableOutput(NS(id, "ttest_table2"))),
           fluidRow(verbatimTextOutput(NS(id, "ttest_text")) %>%
@@ -108,7 +107,7 @@ ttestUI <- function(id,
   )
 }
 
-ttestSE <- function(id) {
+stat_t_test_se <- function(id) {
   moduleServer(id, function(input, output, session) {
     observeEvent(data, {
       delay(1000, click("updatebtn"))
@@ -158,7 +157,7 @@ ttestSE <- function(id) {
     code_text <- reactive({
       paste0(
         "\n \n data %>% ", "filter(", input$ttest_xvar, "%in% c(", paste0("'", input$ttest_group, "'", collapse = ","), ")) %>% ",
-        "\n    t.test(", input$ttest_yvar, " ~ ", input$ttest_xvar, ", data = . ", ") %>% \n    tidy() %>% \n    mutate(p.value = pvalue(.$p.value))"
+        "\n    t.test(", input$ttest_yvar, " ~ ", input$ttest_xvar, ", data = . ", ") %>% \n    tidy() %>% \n    mutate(p.value = scales::pvalue(.$p.value))"
       )
     })
 
@@ -187,7 +186,7 @@ ttestSE <- function(id) {
     code_text2 <- reactive({
       paste0(
         "\n \n data %>% ", "filter(", input$ttest_xvar, "%in% c(", paste0("'", input$ttest_group, "'", collapse = ","), ")) %>% ",
-        "\n    t.test(", input$ttest_yvar, " ~ ", input$ttest_xvar, ", var.equal = TRUE, data = . ", ") %>% \n    tidy() %>% \n    mutate(p.value = pvalue(.$p.value))"
+        "\n    t.test(", input$ttest_yvar, " ~ ", input$ttest_xvar, ", var.equal = TRUE, data = . ", ") %>% \n    tidy() %>% \n    mutate(p.value = scales::pvalue(.$p.value))"
       )
     })
 
@@ -242,11 +241,7 @@ ttestSE <- function(id) {
 
     ns <- NS(id)
 
-    observeEvent(input$ttest_rmv, {
-      removeUI(
-        selector = paste0("#", ns("placeholder1"))
-      )
-    })
+
 
     mod_id <- paste0(id, "-ttest_")
 
@@ -262,3 +257,55 @@ ttestSE <- function(id) {
     })
   })
 }
+
+
+
+ui <- fluidPage(
+  shinyjs::useShinyjs(),
+  tags$head(
+    tags$style(
+      HTML('
+              .input-view .well { width: 350px; margin-left: -10px; }
+              .well  { background-color: #ffffff !important;}
+              .result-view { margin-left: 20px; width: 700px; }
+              .toggle-btnplay { visibility: visible; background: none; }
+              .cont2 .shiny-input-container:not(.shiny-input-container-inline) { width: auto; 	max-width: 100%; }
+              .cont3 { margin-left: 10px; visibility: hidden; }
+              .grid-container { display: flex; }
+              #code { white-space: pre; margin: 20px; }
+              .module-name {margin-top: 4px; font-style: italic;  width: 275px;}
+              .shiny-text-output {  border: none;  margin-top: 20px;}
+              .bootstrap-switch.bootstrap-switch-focused {	border-color: #d4d0d0;	outline: 0;	-webkit-box-shadow: none; box-shadow: none;}
+              .bootstrap-switch.bootstrap-switch-mini .bootstrap-switch-handle-off, .bootstrap-switch.bootstrap-switch-mini .bootstrap-switch-handle-on, .bootstrap-switch.bootstrap-switch-mini .bootstrap-switch-label {padding: 1px 5px;font-size: 12px;line-height: 1;}
+              .btn-play {padding: 0 !important;  margin-bottom: 10px;border: none;}
+              .btn-play:hover {color: #000000; background-color:  #ffffff;border-color:  #ffffff;}
+              .module-style { text-align: left; background-color: #faf9f7; border: 0; margin-bottom: 5px;}
+              .parent .row .col-sm-3 {max-width: 400px !important;min-width: 300px !important;}
+              .custom-scroll {max-height: 80vh;min-height: 30vh;overflow-y: auto;overflow-x: hidden;position: relative;scrollbar-width: thin;padding-right: 15px;}
+              .custom-scroll::-webkit-scrollbar {width: 4px;background: #faf9f7;}
+              .custom-scroll::-webkit-scrollbar-track {-webkit-border-radius: 2px;border-radius: 2px;}
+              .custom-scroll::-webkit-scrollbar-thumb {-webkit-border-radius: 2px;border-radius: 2px;background:  #C0C0C0;}
+
+
+             ')
+    )
+  ),
+  theme = bslib::bs_theme(),
+  stat_t_test_ui("module", data)
+)
+server <- function(input, output, session) {
+  stat_t_test_se("module")
+}
+
+
+shinyApp(ui, server)
+
+
+
+}
+
+
+stat_t_test(mtcars)
+
+
+

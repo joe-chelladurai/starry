@@ -12,28 +12,53 @@
 #' }
 #' @export
 
-stat_frequency <- function(data) {
+stat_frequency <- function(data, xvar) {
 
-  frequency_ui <- function(id,
-                           data) {
+  if (missing(xvar)) {xvar = ""} else {xvar = deparse(substitute(xvar))}
+
+
+  stat_frequency_ui <- function(id,
+                                frequency_xvar = xvar) {
     ns <- NS(id)
+    tagList(
+      div(id = ns('placeholder1'), class = "parent",
+          div(class = "inputresultview", style = "display: flex; margin-top: 10px; margin-bottom: 10px;",
+              div(class = "input-view well", style = "padding-right: 0; width: 350px;",
+                  div(class = "custom-scroll",
+                      div(class = "grid-container",
+                          div("Frequency",  class = "module-name"),
+                          div(class = "cont2",
+                              switchInput(NS(id, "frequency_instant"),
+                                          label = "",
+                                          value = TRUE,
+                                          size = "mini",
+                                          onLabel = "",
+                                          offLabel = "")),
+                          div(class = "cont3", actionButton(NS(id, "frequency_run"), class = "btn-play",
+                                                            label = icon(name = "fas fa-play", lib = "font-awesome")))
 
-    fluidPage(
-      titlePanel("Frequency"),
-      sidebarLayout(
-        sidebarPanel(width = 3,
+                      ),
+
                      selectizeInput(NS(id, "frequency_xvar"),
                                     label = "X",
                                     choices = c("", names(data)),
-                     )),
-        mainPanel(width = 9,
-                  fluidRow(tableOutput(NS(id, "frequency_table")))
-        )
+                                    selected = frequency_xvar
+                     ))),
+
+                  div(class = "result-view",
+
+                  fluidRow(tableOutput(NS(id, "frequency_table"))),
+                  fluidRow(verbatimTextOutput(NS(id, "frequency_text")) |>
+                             tagAppendAttributes(class = "codeoutput"))
+        ))
       ))
   }
 
-  frequency_se <- function(id, data) {
+  stat_frequency_se <- function(id) {
     moduleServer(id, function(input, output, session) {
+
+      req(data)
+
       observeEvent(data, {
         updateSelectizeInput(
           session,
@@ -44,6 +69,20 @@ stat_frequency <- function(data) {
 
       ns <- NS(id)
 
+      observeEvent(input$frequency_instant, {
+        if(input$frequency_instant == TRUE) {
+          removeClass("frequency_run", "toggle-btnplay")
+        } else {
+          addClass("frequency_run", "toggle-btnplay")
+        }
+      })
+
+
+      run <- reactive({
+        input$frequency_run
+      })
+
+
       code_text <- reactive({
         t <- paste0(
           "\n \n data |> ",
@@ -52,29 +91,66 @@ stat_frequency <- function(data) {
       })
 
       code_text2 <- reactive({
+        if(input$frequency_instant) {
         code_text()
+        } else {
+          req(run())
+          isolate(code_text())
+        }
       })
 
-      output$frequency_table <- renderTable(
-        {
+      output$frequency_table <- renderTable({
           req(input$frequency_xvar)
           eval(parse(text = code_text2()))
-        }
+        })
 
-      )
+      output$frequency_text <- renderText({
+        paste(code_text())
+      })
+
+
     })
+
   }
   ui <- fluidPage(
+    shinyjs::useShinyjs(),
+    tags$head(
+      tags$style(
+        HTML('
+              .input-view .well { width: 350px; margin-left: -10px; }
+              .well  { background-color: #ffffff !important;}
+              .result-view { margin-left: 20px; width: 700px; }
+              .toggle-btnplay { visibility: visible; background: none; }
+              .cont2 .shiny-input-container:not(.shiny-input-container-inline) { width: auto; 	max-width: 100%; }
+              .cont3 { margin-left: 10px; visibility: hidden; }
+              .grid-container { display: flex; }
+              #code { white-space: pre; margin: 20px; }
+              .module-name {margin-top: 4px; font-style: italic;  width: 275px;}
+              .shiny-text-output {  border: none;  margin-top: 20px;}
+              .bootstrap-switch.bootstrap-switch-focused {	border-color: #d4d0d0;	outline: 0;	-webkit-box-shadow: none; box-shadow: none;}
+              .bootstrap-switch.bootstrap-switch-mini .bootstrap-switch-handle-off, .bootstrap-switch.bootstrap-switch-mini .bootstrap-switch-handle-on, .bootstrap-switch.bootstrap-switch-mini .bootstrap-switch-label {padding: 1px 5px;font-size: 12px;line-height: 1;}
+              .btn-play {padding: 0 !important;  margin-bottom: 10px;border: none;}
+              .btn-play:hover {color: #000000; background-color:  #ffffff;border-color:  #ffffff;}
+              .module-style { text-align: left; background-color: #faf9f7; border: 0; margin-bottom: 5px;}
+              .parent .row .col-sm-3 {max-width: 400px !important;min-width: 300px !important;}
+              .custom-scroll {max-height: 80vh;min-height: 30vh;overflow-y: auto;overflow-x: hidden;position: relative;scrollbar-width: thin;padding-right: 15px;}
+              .custom-scroll::-webkit-scrollbar {width: 4px;background: #faf9f7;}
+              .custom-scroll::-webkit-scrollbar-track {-webkit-border-radius: 2px;border-radius: 2px;}
+              .custom-scroll::-webkit-scrollbar-thumb {-webkit-border-radius: 2px;border-radius: 2px;background:  #C0C0C0;}
 
-    theme = bslib::bs_theme(enable_rounded = FALSE),
-    tags$style(' .well  { background-color: "#ffffff" !important;}'),
-    frequency_ui("module", data)
+
+             ')
+      )
+    ),
+    theme = bslib::bs_theme(),
+    stat_frequency_ui("module")
   )
 
   server <- function(input, output, session) {
-    frequency_se("module", data)
+    stat_frequency_se("module")
   }
   shinyApp(ui, server)
 }
 
 
+stat_frequency(mtcars)
