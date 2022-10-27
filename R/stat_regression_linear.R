@@ -1,14 +1,17 @@
 
 
-linregUI <- function(id,
-                   linreg_xvar,
-                   linreg_yvar,
-                   linreg_vartext,
-                   linreg_code,
-                   linreg_showcode,
-                   linreg_instant,
-                   linreg_run,
-                   linreg_rmv) {
+stat_regression_linear <- function(data, xvar, yvar, code, show_code) {
+
+  if (missing(xvar)) {xvar = ""} else {xvar = deparse(substitute(xvar))}
+  if (missing(yvar)) {yvar = ""} else {yvar = deparse(substitute(yvar))}
+  if (missing(code)) {code = ""}
+  if (missing(show_code)) {show_code = FALSE}
+
+stat_regression_linear_ui <- function(id,
+                   linreg_xvar = xvar,
+                   linreg_yvar = yvar,
+                   linreg_code = code,
+                   linreg_showcode = show_code) {
   ns <- NS(id)
   tagList(
     div(id = ns('placeholder1'), class = "parent",
@@ -34,7 +37,7 @@ linregUI <- function(id,
                                    #hidden(
                                    hidden(textInput(NS(id, "linreg_vartext"),
                                                     label = "Variables Text",
-                                                    value = linreg_vartext),
+                                                    value = ""),
                                           actionButton(NS(id, "updatebtn"), "Update")),
                                    #),
 
@@ -50,7 +53,7 @@ linregUI <- function(id,
                                                     create = TRUE
                                                   ),
                                                   #    selected = unlist(strsplit(linreg_vartext, "\\,")),
-                                                  selected = linreg_vartext,
+                                                  selected = "",
                                                   multiple = TRUE),
 
                                    actionButton(NS(id, "toggle_linreg_add_code"),
@@ -77,11 +80,7 @@ linregUI <- function(id,
         ),
         div(class = "result-view",
 
-                  fluidRow(actionButton(NS(id, "linreg_rmv"),
-                                        class = "child",
-                                        label = NULL,
-                                        icon = icon("fas fa-times"),
-                                        value = linreg_rmv)),
+
                   fluidRow(hidden(textOutput(NS(id, "something")))),
 
                   fluidRow(tableOutput(NS(id, "linreg_glance"))),
@@ -96,76 +95,26 @@ linregUI <- function(id,
 
 }
 
-linregSE <- function(id) {
+stat_regression_linear_se <- function(id) {
   moduleServer(id, function(input, output, session) {
 
-  #  observeEvent(data, {
-  #    updateSelectInput(session, "linreg_yvar", choices = c("", names(data)))
-  #  })
-
     observeEvent(data, {
-      #  req(input$linreg_vartext)
       updateSelectizeInput(session, "linreg_xvar", choices = c("", names(data))) #, selected = unlist(strsplit(input$linreg_vartext, "\\,"))))
       delay(1, click("updatebtn"))
-
     })
-
-    #  observeEvent(input$linreg_vartext, {
-    #   isolate(delay(1000, updateSelectizeInput(session, "linreg_xvar", choices = c("", names(data)), selected = unlist(strsplit(input$linreg_vartext, "\\,")))))
-    #  })
-    #  observeEvent(textvar,{
-    #    if (!is.na(textvar) && textvar != "") {
-    #   isolate(delay(1,
-    #         updateTextInput(session, "linreg_vartext", value = textvar)
-    #         ))
-    #
-    #   }
-    #  })
-
-    #  observeEvent(input$linreg_vartext,{
-    #    delay(1, updateSelectizeInput(session, "linreg_xvar", selected = unlist(strsplit(input$linreg_vartext, "\\,"))))
-    #  })
-
-    #  textvar2 <- reactive({
-    #    req(textvar)
-    #    unlist(strsplit(textvar, "\\,"))
-    #  })
-    #  observeEvent(textvar,{
-    #    #    if (!is.na(textvar) && textvar != "") {
-    #
-    #
-    #    isolate(delay(1,
-    #          updateSelectizeInput(session, "linreg_xvar", selected = textvar2())
-    #    ))
-    #
-    #    #     }
-    #  })
-
-
 
 
     observeEvent(input$updatebtn, {
-      #      updateTextInput(session, "linreg_vartext", value = "x2, x3")
       updateSelectizeInput(session, "linreg_xvar", selected = unlist(strsplit(input$linreg_vartext, "\\,")))#selected = c("x4", "x3", "x2", "x1"))
     })
 
     ns <- NS(id)
 
-    observeEvent(input$linreg_rmv, {
-      removeUI(
-        selector = paste0('#', ns('placeholder1'))
-      )
-    })
+
 
     output$something <- renderText({
       paste(input$linreg_vartext)
     })
-
-    #  output$something <- renderText({
-    #   req(textvar)
-    #    req(textvar2())
-    #    paste("this ", textvar, paste("that ", textvar2()))
-    #  })
 
     observeEvent(input$toggle_linreg_add_code, {
 
@@ -195,7 +144,6 @@ linregSE <- function(id) {
 
 
     observeEvent(input$linreg_xvar,{
-      #     if(is.na(input$linreg_vartext))
       req(input$linreg_xvar)
       updateTextInput(session, "linreg_vartext", value = input$linreg_xvar)
     })
@@ -214,7 +162,7 @@ linregSE <- function(id) {
 
         " \n    tidy() %>% ",
 
-        " \n    mutate(p.value = pvalue(.$p.value))"
+        " \n    mutate(p.value = scales::pvalue(.$p.value))"
 
       )
 
@@ -225,8 +173,6 @@ linregSE <- function(id) {
         paste0(input$linreg_code))
 
       t
-
-
 
 
     })
@@ -283,29 +229,21 @@ linregSE <- function(id) {
 
 
 
-
     output$linreg_glance  <- renderTable({
-
-
       eval(parse(text = code_text3()))
-
     }, caption = "Model Fit Statistics", caption.placement = "top")
 
 
-
     output$linreg_table  <- renderTable({
-
-
       eval(parse(text = code_text0()))
-
     }, align = c("lrrrr"),caption = "Regression Table", na = "", caption.placement = "top")
 
 
 
-    
-    
+
+
     mod_id <- paste0(id, "-linreg_")
-    
+
     observeEvent(input$linreg_showcode, {
       if (input$linreg_showcode == "TRUE") {
         runjs(paste0('$("#', mod_id, 'text").css({"visibility":"visible","font-size":"12px"})'))
@@ -314,15 +252,10 @@ linregSE <- function(id) {
         runjs(paste0('$("#', mod_id, 'text").css({"visibility":"hidden","font-size":"0px"})'))
       }
     })
-    
-    
+
+
     output$linreg_text <- renderText({
-
-  
         paste(code_text0(), "\n \n ", code_text3())
-
-  
-
     })
 
 
@@ -333,3 +266,55 @@ linregSE <- function(id) {
   })
 
 }
+
+
+
+
+ui <- fluidPage(
+  shinyjs::useShinyjs(),
+  tags$head(
+    tags$style(
+      HTML('
+              .input-view .well { width: 350px; margin-left: -10px; }
+              .well  { background-color: #ffffff !important;}
+              .result-view { margin-left: 20px; width: 700px; }
+              .toggle-btnplay { visibility: visible; background: none; }
+              .cont2 .shiny-input-container:not(.shiny-input-container-inline) { width: auto; 	max-width: 100%; }
+              .cont3 { margin-left: 10px; visibility: hidden; }
+              .grid-container { display: flex; }
+              #code { white-space: pre; margin: 20px; }
+              .module-name {margin-top: 4px; font-style: italic;  width: 275px;}
+              .shiny-text-output {  border: none;  margin-top: 20px;}
+              .bootstrap-switch.bootstrap-switch-focused {	border-color: #d4d0d0;	outline: 0;	-webkit-box-shadow: none; box-shadow: none;}
+              .bootstrap-switch.bootstrap-switch-mini .bootstrap-switch-handle-off, .bootstrap-switch.bootstrap-switch-mini .bootstrap-switch-handle-on, .bootstrap-switch.bootstrap-switch-mini .bootstrap-switch-label {padding: 1px 5px;font-size: 12px;line-height: 1;}
+              .btn-play {padding: 0 !important;  margin-bottom: 10px;border: none;}
+              .btn-play:hover {color: #000000; background-color:  #ffffff;border-color:  #ffffff;}
+              .module-style { text-align: left; background-color: #faf9f7; border: 0; margin-bottom: 5px;}
+              .parent .row .col-sm-3 {max-width: 400px !important;min-width: 300px !important;}
+              .custom-scroll {max-height: 80vh;min-height: 30vh;overflow-y: auto;overflow-x: hidden;position: relative;scrollbar-width: thin;padding-right: 15px;}
+              .custom-scroll::-webkit-scrollbar {width: 4px;background: #faf9f7;}
+              .custom-scroll::-webkit-scrollbar-track {-webkit-border-radius: 2px;border-radius: 2px;}
+              .custom-scroll::-webkit-scrollbar-thumb {-webkit-border-radius: 2px;border-radius: 2px;background:  #C0C0C0;}
+
+
+             ')
+    )
+  ),
+  theme = bslib::bs_theme(),
+  stat_regression_linear_ui("module")
+)
+server <- function(input, output, session) {
+  stat_regression_linear_se("module")
+}
+
+
+shinyApp(ui, server)
+
+
+
+}
+
+
+stat_regression_linear(mtcars)
+
+
