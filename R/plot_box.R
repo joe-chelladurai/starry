@@ -1,11 +1,43 @@
 
-plot_box <- function(data, xvar, yvar, theme, group, code, shape, size, row, column, width, height, title, subtitle, xlab, ylab, caption, show_code){
 
-  if (missing(xvar)) {xvar = ""} else {xvar = deparse(substitute(xvar))}
-  if (missing(yvar)) {yvar = ""} else {yvar = deparse(substitute(yvar))}
-  if (missing(shape)) {shape = ""} else {shape = deparse(substitute(shape))}
-  if (missing(group)) {group = ""} else {group = deparse(substitute(group))}
-  if (missing(size)) {size = ""} else {size = deparse(substitute(size))}
+#' Plot - box
+#' @param data data
+#' @param x variable on x axis
+#' @param y variable on y axis
+#' @param fill fill
+#' @param outline outline
+#' @param box_width width of box
+#' @param row facet row in grid
+#' @param column facet column in grid
+#' @param title title of plot
+#' @param subtitle subtitle of plot
+#' @param xlab x-axis
+#' @param ylab y-axis label
+#' @param caption caption
+#' @param width width of plot
+#' @param height height of plot
+#' @param show_code show the generated code TRUE or FALSE, (default TRUE)
+#' @import shiny
+#' @import ggplot2
+#' @importFrom shinyjs hidden removeClass addClass toggle runjs
+#' @importFrom shinyWidgets switchInput prettyCheckbox
+#' @return No return value. This function is called for the side effect of
+#' launching a shiny application.
+#' @examples
+#' if (interactive()) {
+#'   plot_box(mtcars)
+#' }
+#' @export
+
+
+
+plot_box <- function(data, x, y, theme, box_width, code, fill, outline, row, column, width, height, title, subtitle, xlab, ylab, caption, show_code){
+
+  if (missing(x)) {x = ""} else {x = deparse(substitute(x))}
+  if (missing(y)) {y = ""} else {y = deparse(substitute(y))}
+  if (missing(fill)) {fill = ""} else {fill = deparse(substitute(fill))}
+  if (missing(box_width)) {box_width = ""} else {box_width = deparse(substitute(box_width))}
+  if (missing(outline)) {outline = ""} else {outline = deparse(substitute(outline))}
   if (missing(row)) {row = ""} else {row = deparse(substitute(row))}
   if (missing(column)) {column = ""} else {column = deparse(substitute(column))}
   if (missing(height)) {height = NA}
@@ -17,22 +49,18 @@ plot_box <- function(data, xvar, yvar, theme, group, code, shape, size, row, col
   if (missing(ylab)) {ylab = ""}
   if (missing(theme)) {theme = "theme_bw"} else {theme = deparse(substitute(theme))}
   if (missing(code)) {code = ""}
-  if (missing(show_code)) {show_code = FALSE}
-
-
-
-
+  if (missing(show_code)) {show_code = TRUE}
 
 
 plot_box_ui <- function(id,
                             data,
-                            box_xvar = xvar,
-                            box_yvar = yvar,
+                            box_x = x,
+                            box_y = y,
                             box_theme = theme,
-                            box_group = group,
+                            box_boxwidth = box_width,
                             box_code = code,
-                            box_shape = shape,
-                            box_size = size,
+                            box_fill = fill,
+                            box_outline = outline,
                             box_wraprow = row,
                             box_wrapcol = column,
                             box_width = width,
@@ -68,31 +96,31 @@ plot_box_ui <- function(id,
                 label = icon(name = "fas fa-play", lib = "font-awesome")
               ))
             ),
-            selectizeInput(NS(id, "box_yvar"),
+            selectizeInput(NS(id, "box_y"),
               label = "Y",
               choices = c("", names(data)),
-              selected = box_yvar
+              selected = box_y
             ),
-            selectInput(NS(id, "box_xvar"),
+            selectInput(NS(id, "box_x"),
               label = "X",
               choices = c("", names(data)),
-              selected = box_xvar
+              selected = box_x
             ),
-            selectInput(NS(id, "box_shape"),
+            selectInput(NS(id, "box_fill"),
               label = "Fill",
               choices = c(" ", names(data)),
-              selected = box_shape
+              selected = box_fill
             ),
-            selectizeInput(NS(id, "box_size"),
+            selectizeInput(NS(id, "box_outline"),
               label = "Outline",
               choices = c(" ", names(data)),
-              selected = box_size,
+              selected = box_outline,
               options = list(create = TRUE)
             ),
-            numericInput(NS(id, "box_group"),
+            numericInput(NS(id, "box_boxwidth"),
               label = "Box width",
               step = 0.1,
-              value = box_group
+              value = box_boxwidth
             ),
             actionButton(NS(id, "toggle_box_facet"),
               width = "100%",
@@ -220,25 +248,25 @@ plot_box_se <- function(id) {
     observeEvent(data, {
       updateSelectizeInput(
         session,
-        "box_xvar",
+        "box_x",
         choices = c("", names(data))
       )
 
       updateSelectInput(
         session,
-        "box_yvar",
+        "box_y",
         choices = c("", names(data))
       )
 
       updateSelectInput(
         session,
-        "box_shape",
+        "box_fill",
         choices = c(" ", names(data))
       )
 
       updateSelectizeInput(
         session,
-        "box_size",
+        "box_outline",
         choices = c(" ", names(data))
       )
 
@@ -352,10 +380,10 @@ plot_box_se <- function(id) {
 
 
     boxwidth <- reactive({
-      if (is.na(input$box_group)) {
+      if (is.na(input$box_boxwidth)) {
         return(1)
       } else {
-        input$box_width
+        input$box_boxwidth
       }
     })
 
@@ -410,29 +438,29 @@ plot_box_se <- function(id) {
 
     code_text <- reactive({
       req(
-        isTruthy(input$box_xvar != "") |
-          isTruthy(input$box_yvar != "")
+        isTruthy(input$box_x != "") |
+          isTruthy(input$box_y != "")
       )
 
       t <- paste0(
         "\n \n ggplot(data, aes(",
-        if (input$box_xvar != "") {
-          paste0("factor(", input$box_xvar, ")")
+        if (input$box_x != "") {
+          paste0("factor(", input$box_x, ")")
         },
-        if (input$box_yvar != "" && input$box_xvar != "") {
-          paste0(", ", input$box_yvar)
-        } else if (input$box_yvar != "") {
-          paste0("y = ", input$box_yvar)
+        if (input$box_y != "" && input$box_x != "") {
+          paste0(", ", input$box_y)
+        } else if (input$box_y != "") {
+          paste0("y = ", input$box_y)
         } else {
 
         },
-        if (input$box_shape != " ") {
-          paste0(", fill = factor(", input$box_shape, ")")
+        if (input$box_fill != " ") {
+          paste0(", fill = factor(", input$box_fill, ")")
         } else {
 
         },
-        if (input$box_size != " ") {
-          paste0(", color = factor(", input$box_size, ")")
+        if (input$box_outline != " ") {
+          paste0(", color = factor(", input$box_outline, ")")
         } else {
 
         },
@@ -440,9 +468,9 @@ plot_box_se <- function(id) {
           "))"
         ),
         paste0(
-          " + \n    geom_box(",
-          if (!is.na(input$box_group)) {
-            paste0("width = ", input$box_group)
+          " + \n    geom_boxplot(",
+          if (!is.na(input$box_boxwidth)) {
+            paste0("width = ", input$box_boxwidth)
           } else {
 
           },
@@ -452,9 +480,9 @@ plot_box_se <- function(id) {
 
       t <- paste(
         t,
-        if (input$box_yvar != "" &&
-          input$box_xvar == "" &&
-          input$box_shape == " ") {
+        if (input$box_y != "" &&
+          input$box_x == "" &&
+          input$box_fill == " ") {
           paste(
             "+ \n    scale_x_discrete()"
           )

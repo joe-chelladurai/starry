@@ -2,6 +2,19 @@
 
 #' Plot - bar
 #' @param data data
+#' @param y variable on y axis
+#' @param fill fill
+#' @param outline outline
+#' @param bar_width width of bar
+#' @param position position of bars
+#' @param labels data labels
+#' @param row facet row in grid
+#' @param column facet column in grid
+#' @param title title of plot
+#' @param subtitle subtitle of plot
+#' @param xlab x-axis
+#' @param ylab y-axis label
+#' @param caption caption
 #' @import shiny
 #' @import ggplot2
 #' @importFrom shinyjs hidden removeClass addClass toggle runjs
@@ -16,14 +29,13 @@
 
 
 
-plot_bar <- function(data, yvar, theme, group, code, shape, size, position, labels, row, prop, column, title, subtitle, xlab, ylab, caption) {
+plot_bar <- function(data, y, theme, bar_width, code, fill, outline, position, labels, row, prop, column, title, subtitle, xlab, ylab, caption) {
 
 
-
-  if (missing(yvar)) {yvar = ""} else {yvar = deparse(substitute(yvar))}
-  if (missing(shape)) {shape = ""} else {shape = deparse(substitute(shape))}
-  if (missing(group)) {group = ""} else {group = deparse(substitute(group))}
-  if (missing(size)) {size = ""} else {size = deparse(substitute(size))}
+  if (missing(y)) {y = ""} else {y = deparse(substitute(y))}
+  if (missing(fill)) {fill = ""} else {fill = deparse(substitute(fill))}
+  if (missing(bar_width)) {bar_width = ""} else {bar_width = deparse(substitute(bar_width))}
+  if (missing(outline)) {outline = ""} else {outline = deparse(substitute(outline))}
   if (missing(row)) {row = ""} else {row = deparse(substitute(row))}
   if (missing(column)) {column = ""} else {column = deparse(substitute(column))}
   if (missing(title)) {title = ""}
@@ -42,12 +54,12 @@ plot_bar <- function(data, yvar, theme, group, code, shape, size, position, labe
 
 plot_bar_UI <- function(id,
                              data,
-                             bar_yvar = yvar,
+                             bar_y = y,
                              bar_theme = theme,
-                             bar_group = group,
+                             bar_barwidth = bar_width,
                              bar_code = code,
-                             bar_shape = shape,
-                             bar_size = size,
+                             bar_fill = fill,
+                             bar_outline = outline,
                              bar_position = position,
                              bar_labels = labels,
                              bar_wraprow = row,
@@ -90,20 +102,20 @@ plot_bar_UI <- function(id,
                 )
               ),
             ),
-            selectInput(NS(id, "bar_yvar"),
+            selectInput(NS(id, "bar_y"),
               label = "Y",
               choices = c("", names(data)),
-              selected = bar_yvar
+              selected = bar_y
             ),
-            selectInput(NS(id, "bar_shape"),
+            selectInput(NS(id, "bar_fill"),
               label = "Fill",
               choices = c("", names(data)),
-              selected = bar_shape
+              selected = bar_fill
             ),
-            selectizeInput(NS(id, "bar_size"),
+            selectizeInput(NS(id, "bar_outline"),
               label = "Outline",
               choices = c("", names(data)),
-              selected = bar_size,
+              selected = bar_outline,
               options = list(create = TRUE)
             ),
             radioButtons(NS(id, "bar_position"),
@@ -123,10 +135,10 @@ plot_bar_UI <- function(id,
               choices = "",
               selected = bar_prop,
             ),
-            numericInput(NS(id, "bar_group"),
+            numericInput(NS(id, "bar_barwidth"),
               label = "Bar width",
               step = 0.1,
-              value = bar_group
+              value = bar_barwidth
             ),
             actionButton(NS(id, "toggle_bar_facet"),
               width = "100%",
@@ -253,19 +265,19 @@ plot_bar_SE <- function(id) {
     observeEvent(data, {
       updateSelectInput(
         session,
-        "bar_yvar",
+        "bar_y",
         choices = c("", names(data))
       )
 
       updateSelectInput(
         session,
-        "bar_shape",
+        "bar_fill",
         choices = c("", names(data))
       )
 
       updateSelectizeInput(
         session,
-        "bar_size",
+        "bar_outline",
         choices = c("", names(data))
       )
 
@@ -288,7 +300,7 @@ plot_bar_SE <- function(id) {
       updateSelectInput(
         session,
         "bar_prop",
-        choices = c(input$bar_shape, input$bar_yvar, "1")
+        choices = c(input$bar_fill, input$bar_y, "1")
       )
     })
 
@@ -382,7 +394,7 @@ plot_bar_SE <- function(id) {
 
 
     barwidth <- reactive({
-      if (is.na(input$bar_group)) {
+      if (is.na(input$bar_barwidth)) {
         return(1)
       } else {
         input$bar_width
@@ -441,20 +453,20 @@ plot_bar_SE <- function(id) {
 
 
     code_text <- reactive({
-      req(isTruthy(input$bar_yvar != ""))
+      req(isTruthy(input$bar_y != ""))
 
       code <- paste0(
         "\n \n ggplot(data, aes(",
-        if (input$bar_yvar != "") {
-          paste0("y = factor(", input$bar_yvar, ")")
+        if (input$bar_y != "") {
+          paste0("y = factor(", input$bar_y, ")")
         },
-        if (input$bar_shape != "") {
-          paste0(", fill = factor(", input$bar_shape, ")")
+        if (input$bar_fill != "") {
+          paste0(", fill = factor(", input$bar_fill, ")")
         } else {
 
         },
-        if ((input$bar_shape != "" && input$bar_position == "fill") || input$bar_labels == "percent") {
-          if (input$bar_shape == "") {
+        if ((input$bar_fill != "" && input$bar_position == "fill") || input$bar_labels == "percent") {
+          if (input$bar_fill == "") {
             paste0(", by = 1")
           } else {
             paste0(", by = ", input$bar_prop)
@@ -462,8 +474,8 @@ plot_bar_SE <- function(id) {
         } else {
 
         },
-        if (input$bar_size != "") {
-          paste0(", color = factor(", input$bar_size, ")")
+        if (input$bar_outline != "") {
+          paste0(", color = factor(", input$bar_outline, ")")
         } else {
 
         },
@@ -494,8 +506,8 @@ plot_bar_SE <- function(id) {
               #   "'"
             )
           },
-          if (!is.na(input$bar_group)) {
-            paste0(", width = ", input$bar_group)
+          if (!is.na(input$bar_barwidth)) {
+            paste0(", width = ", input$bar_barwidth)
           } else {
 
           },
@@ -505,8 +517,8 @@ plot_bar_SE <- function(id) {
 
       code <- paste(
         code,
-        if (input$bar_yvar != "" &&
-          input$bar_shape == "") {
+        if (input$bar_y != "" &&
+          input$bar_fill == "") {
           paste()
         }
       )
@@ -603,8 +615,8 @@ plot_bar_SE <- function(id) {
               } else if (input$bar_position == "dodge") {
                 paste0(
                   ", position = position_dodge(",
-                  if (!is.na(input$bar_group)) {
-                    paste0("width = ", input$bar_group)
+                  if (!is.na(input$bar_barwidth)) {
+                    paste0("width = ", input$bar_barwidth)
                   } else {
                     paste0("width = 1")
                   },
@@ -613,8 +625,8 @@ plot_bar_SE <- function(id) {
               } else if (input$bar_position == "dodge2") {
                 paste0(
                   ", position = position_dodge2(",
-                  if (!is.na(input$bar_group)) {
-                    paste0("width = ", input$bar_group)
+                  if (!is.na(input$bar_barwidth)) {
+                    paste0("width = ", input$bar_barwidth)
                   } else {
                     paste0("width = 1")
                   },
@@ -635,8 +647,8 @@ plot_bar_SE <- function(id) {
               } else if (input$bar_position == "dodge") {
                 paste0(
                   ", position = position_dodge(",
-                  if (!is.na(input$bar_group)) {
-                    paste0("width = ", input$bar_group)
+                  if (!is.na(input$bar_barwidth)) {
+                    paste0("width = ", input$bar_barwidth)
                   } else {
                     paste0("width = 1")
                   },
@@ -645,8 +657,8 @@ plot_bar_SE <- function(id) {
               } else if (input$bar_position == "dodge2") {
                 paste0(
                   ", position = position_dodge2(",
-                  if (!is.na(input$bar_group)) {
-                    paste0("width = ", input$bar_group)
+                  if (!is.na(input$bar_barwidth)) {
+                    paste0("width = ", input$bar_barwidth)
                   } else {
                     paste0("width = 1")
                   },
@@ -783,4 +795,4 @@ shinyApp(ui, server)
 
 }
 
-plot_bar(mtcars, yvar = cyl)
+# plot_bar(mtcars, y = cyl, fill = am, outline = vs, bar_width = 0.5)

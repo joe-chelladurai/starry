@@ -1,6 +1,6 @@
 
 
-library(corrr)
+
 
 stat_correlation <- function(data, xvar, code, show_code) {
 
@@ -316,5 +316,3 @@ shinyApp(ui, server)
 }
 
 
-stat_correlation(mtcars)
-library(corrr)

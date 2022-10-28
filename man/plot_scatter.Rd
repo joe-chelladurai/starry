@@ -4,10 +4,51 @@
 \alias{plot_scatter}
 \title{Plot - Scatter}
 \usage{
-plot_scatter(data)
+plot_scatter(
+  data,
+  xvar,
+  yvar,
+  color,
+  shape,
+  size,
+  row,
+  column,
+  title,
+  subtitle,
+  caption,
+  xlab,
+  ylab,
+  theme
+)
 }
 \arguments{
 \item{data}{data}
+
+\item{xvar}{x}
+
+\item{yvar}{y}
+
+\item{color}{color}
+
+\item{shape}{shape}
+
+\item{size}{size}
+
+\item{row}{row}
+
+\item{column}{column}
+
+\item{title}{title}
+
+\item{subtitle}{subtitle}
+
+\item{caption}{caption}
+
+\item{xlab}{x axis label}
+
+\item{ylab}{y axis label}
+
+\item{theme}{theme}
 }
 \value{
 No return value. This function is called for the side effect of

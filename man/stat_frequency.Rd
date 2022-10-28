@@ -4,7 +4,7 @@
 \alias{stat_frequency}
 \title{Frequency App}
 \usage{
-stat_frequency(data)
+stat_frequency(data, xvar)
 }
 \arguments{
 \item{data}{data}

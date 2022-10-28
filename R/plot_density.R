@@ -1,5 +1,31 @@
 
 
+#' Plot - Density ------ TO BE CONTINUED
+#' @param data data
+#' @param y variable on y axis
+#' @param fill fill
+#' @param outline outline
+#' @param bar_width width of bar
+#' @param position position of bars
+#' @param labels data labels
+#' @param row facet row in grid
+#' @param column facet column in grid
+#' @param title title of plot
+#' @param subtitle subtitle of plot
+#' @param xlab x-axis
+#' @param ylab y-axis label
+#' @param caption caption
+#' @import shiny
+#' @import ggplot2
+#' @importFrom shinyjs hidden removeClass addClass toggle runjs
+#' @importFrom shinyWidgets switchInput prettyCheckbox
+#' @return No return value. This function is called for the side effect of
+#' launching a shiny application.
+#' @examples
+#' if (interactive()) {
+#'   plot_bar(mtcars)
+#' }
+#' @export
 
 
 
