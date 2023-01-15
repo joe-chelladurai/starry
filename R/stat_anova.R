@@ -133,8 +133,8 @@ stat_anova <- function(data, xvar, yvar, code, show_code) {
           " \n    lm(", input$anova_yvar, " ~ ", "as.factor(", input$anova_xvar, "), data = . ) %>% ",
           " \n    Anova(type = 3) %>% ",
           #     " \n    summary() %>% ",
-          " \n    tidy() %>% ",
-          " \n    mutate(p.value = scales::pvalue(.$p.value))"
+          " \n    tidy()" # %>% ",
+          #" \n    mutate(p.value = scales::pvalue(.$p.value))"
         )
 
         t <- paste0(

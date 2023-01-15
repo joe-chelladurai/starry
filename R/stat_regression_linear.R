@@ -1,5 +1,23 @@
 
 
+
+#' Stat - linear regression
+#' @param data data
+#' @param xvar xvar
+#' @param yvar yvar
+#' @param show_code show/hide code
+#' @param code additional code
+#' @import shiny
+#' @importFrom shinyjs hidden removeClass addClass toggle runjs
+#' @importFrom shinyWidgets switchInput prettyCheckbox
+#' @return No return value. This function is called for the side effect of
+#' launching a shiny application.
+#' @examples
+#' if (interactive()) {
+#'   stat_regression_linear(mtcars)
+#' }
+#' @export
+
 stat_regression_linear <- function(data, xvar, yvar, code, show_code) {
 
   if (missing(xvar)) {xvar = ""} else {xvar = deparse(substitute(xvar))}
@@ -160,9 +178,9 @@ stat_regression_linear_se <- function(id) {
 
      #   " \n    summary() %>% ",
 
-        " \n    tidy() %>% ",
+        " \n    tidy()"# %>% ",
 
-        " \n    mutate(p.value = scales::pvalue(.$p.value))"
+    #    " \n    mutate(p.value = scales::pvalue(.$p.value))"
 
       )
 
@@ -313,8 +331,5 @@ shinyApp(ui, server)
 
 
 }
-
-
-stat_regression_linear(mtcars)
 
 

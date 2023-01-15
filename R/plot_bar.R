@@ -10,11 +10,14 @@
 #' @param labels data labels
 #' @param row facet row in grid
 #' @param column facet column in grid
+#' @param prop proportion
+#' @param theme theme of plot
 #' @param title title of plot
 #' @param subtitle subtitle of plot
 #' @param xlab x-axis
 #' @param ylab y-axis label
 #' @param caption caption
+#' @param code add custom code
 #' @import shiny
 #' @import ggplot2
 #' @importFrom shinyjs hidden removeClass addClass toggle runjs
@@ -29,7 +32,7 @@
 
 
 
-plot_bar <- function(data, y, theme, bar_width, code, fill, outline, position, labels, row, prop, column, title, subtitle, xlab, ylab, caption) {
+plot_bar <- function(data, y, bar_width, fill, outline, position, labels, row, prop, column, theme, title, subtitle, xlab, ylab, caption, code) {
 
 
   if (missing(y)) {y = ""} else {y = deparse(substitute(y))}

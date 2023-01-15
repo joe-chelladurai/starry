@@ -1,6 +1,22 @@
 
 
-
+#' Correlation
+#' @param data data
+#' @param xvar list of variables
+#' @param show_code show/hide code
+#' @param code additional code
+#' @import shiny
+#' @importFrom stats cor.test
+#' @importFrom dplyr select
+#' @importFrom corrr correlate fashion colpair_map shave
+#' @importFrom shinyjs click delay
+#' @return No return value. This function is called for the side effect of
+#' launching a shiny application.
+#' @examples
+#' if (interactive()) {
+#' stat_frequency(mtcars)
+#' }
+#' @export
 
 stat_correlation <- function(data, xvar, code, show_code) {
 

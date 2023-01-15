@@ -157,7 +157,7 @@ stat_t_test_se <- function(id) {
     code_text <- reactive({
       paste0(
         "\n \n data %>% ", "filter(", input$ttest_xvar, "%in% c(", paste0("'", input$ttest_group, "'", collapse = ","), ")) %>% ",
-        "\n    t.test(", input$ttest_yvar, " ~ ", input$ttest_xvar, ", data = . ", ") %>% \n    tidy() %>% \n    mutate(p.value = scales::pvalue(.$p.value))"
+        "\n    t.test(", input$ttest_yvar, " ~ ", input$ttest_xvar, ", data = . ", ") %>% \n    tidy()" # %>% \n    mutate(p.value = scales::pvalue(.$p.value))"
       )
     })
 
@@ -186,7 +186,7 @@ stat_t_test_se <- function(id) {
     code_text2 <- reactive({
       paste0(
         "\n \n data %>% ", "filter(", input$ttest_xvar, "%in% c(", paste0("'", input$ttest_group, "'", collapse = ","), ")) %>% ",
-        "\n    t.test(", input$ttest_yvar, " ~ ", input$ttest_xvar, ", var.equal = TRUE, data = . ", ") %>% \n    tidy() %>% \n    mutate(p.value = scales::pvalue(.$p.value))"
+        "\n    t.test(", input$ttest_yvar, " ~ ", input$ttest_xvar, ", var.equal = TRUE, data = . ", ") %>% \n    tidy() " # %>% \n    mutate(p.value = scales::pvalue(.$p.value))"
       )
     })
 

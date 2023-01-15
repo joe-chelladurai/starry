@@ -10,7 +10,6 @@ plot_box(
   y,
   theme,
   box_width,
-  code,
   fill,
   outline,
   row,
@@ -22,7 +21,8 @@ plot_box(
   xlab,
   ylab,
   caption,
-  show_code
+  show_code,
+  code
 )
 }
 \arguments{
@@ -31,6 +31,8 @@ plot_box(
 \item{x}{variable on x axis}
 
 \item{y}{variable on y axis}
+
+\item{theme}{theme of plot}
 
 \item{box_width}{width of box}
 
@@ -57,6 +59,8 @@ plot_box(
 \item{caption}{caption}
 
 \item{show_code}{show the generated code TRUE or FALSE, (default TRUE)}
+
+\item{code}{add custom code}
 }
 \value{
 No return value. This function is called for the side effect of

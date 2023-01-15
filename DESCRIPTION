@@ -18,8 +18,9 @@ Imports:
     dplyr,
     ggplot2,
     magrittr,
-    scales,
+    stringr,
     shiny,
+    shinyAce,
     shinyjs,
     shinyWidgets
 RoxygenNote: 7.2.1

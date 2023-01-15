@@ -1,7 +1,8 @@
 
 
-#' Frequency App
+#' Frequency
 #' @param data data
+#' @param xvar variable
 #' @import shiny
 #' @importFrom dplyr count
 #' @return No return value. This function is called for the side effect of

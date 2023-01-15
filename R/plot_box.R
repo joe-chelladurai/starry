@@ -9,6 +9,7 @@
 #' @param box_width width of box
 #' @param row facet row in grid
 #' @param column facet column in grid
+#' @param theme theme of plot
 #' @param title title of plot
 #' @param subtitle subtitle of plot
 #' @param xlab x-axis
@@ -17,10 +18,11 @@
 #' @param width width of plot
 #' @param height height of plot
 #' @param show_code show the generated code TRUE or FALSE, (default TRUE)
+#' @param code add custom code
 #' @import shiny
 #' @import ggplot2
 #' @importFrom shinyjs hidden removeClass addClass toggle runjs
-#' @importFrom shinyWidgets switchInput prettyCheckbox
+#' @importFrom shinyWidgets switchInput prettyCheckbox updatePrettyCheckbox
 #' @return No return value. This function is called for the side effect of
 #' launching a shiny application.
 #' @examples
@@ -31,7 +33,7 @@
 
 
 
-plot_box <- function(data, x, y, theme, box_width, code, fill, outline, row, column, width, height, title, subtitle, xlab, ylab, caption, show_code){
+plot_box <- function(data, x, y, theme, box_width, fill, outline, row, column, width, height, title, subtitle, xlab, ylab, caption, show_code, code){
 
   if (missing(x)) {x = ""} else {x = deparse(substitute(x))}
   if (missing(y)) {y = ""} else {y = deparse(substitute(y))}
@@ -688,7 +690,4 @@ plot_box_se <- function(id) {
 
 
 }
-
-
-plot_box(mtcars)
 

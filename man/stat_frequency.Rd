@@ -2,19 +2,21 @@
 % Please edit documentation in R/stat_frequency.R
 \name{stat_frequency}
 \alias{stat_frequency}
-\title{Frequency App}
+\title{Frequency}
 \usage{
 stat_frequency(data, xvar)
 }
 \arguments{
 \item{data}{data}
+
+\item{xvar}{variable}
 }
 \value{
 No return value. This function is called for the side effect of
 launching a shiny application.
 }
 \description{
-Frequency App
+Frequency
 }
 \examples{
 if (interactive()) {
