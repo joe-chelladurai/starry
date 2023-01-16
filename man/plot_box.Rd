@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_box.R
 \name{plot_box}
 \alias{plot_box}
-\title{Plot - box}
+\title{Plot - Box}
 \usage{
 plot_box(
   data,
@@ -67,7 +67,7 @@ No return value. This function is called for the side effect of
 launching a shiny application.
 }
 \description{
-Plot - box
+Plot - Box
 }
 \examples{
 if (interactive()) {

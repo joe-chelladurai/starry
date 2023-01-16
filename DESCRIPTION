@@ -1,7 +1,7 @@
 Package: starry
 Type: Package
 Title: Explore Data with Plots and Tables
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: 
     person("Joe", "Chelladurai", , "joe.chelladurai@outlook.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-8477-3753"))
@@ -20,7 +20,6 @@ Imports:
     magrittr,
     stringr,
     shiny,
-    shinyAce,
     shinyjs,
     shinyWidgets
 RoxygenNote: 7.2.1

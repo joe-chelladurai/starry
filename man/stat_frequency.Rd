@@ -2,21 +2,23 @@
 % Please edit documentation in R/stat_frequency.R
 \name{stat_frequency}
 \alias{stat_frequency}
-\title{Frequency}
+\title{Stat - Frequency}
 \usage{
-stat_frequency(data, xvar)
+stat_frequency(data, xvar, show_code)
 }
 \arguments{
 \item{data}{data}
 
 \item{xvar}{variable}
+
+\item{show_code}{show/hide code}
 }
 \value{
 No return value. This function is called for the side effect of
 launching a shiny application.
 }
 \description{
-Frequency
+Stat - Frequency
 }
 \examples{
 if (interactive()) {

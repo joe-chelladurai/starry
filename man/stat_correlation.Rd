@@ -2,7 +2,7 @@
 % Please edit documentation in R/stat_correlation.R
 \name{stat_correlation}
 \alias{stat_correlation}
-\title{Correlation}
+\title{Stat - Correlation}
 \usage{
 stat_correlation(data, xvar, code, show_code)
 }
@@ -20,7 +20,7 @@ No return value. This function is called for the side effect of
 launching a shiny application.
 }
 \description{
-Correlation
+Stat - Correlation
 }
 \examples{
 if (interactive()) {

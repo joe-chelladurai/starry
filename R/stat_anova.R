@@ -1,4 +1,23 @@
 
+
+#' Stat - Anova
+#' @param data data
+#' @param xvar xvar
+#' @param yvar yvar
+#' @param show_code show/hide code
+#' @param code additional code
+#' @import shiny
+#' @importFrom shinyjs hidden removeClass addClass toggle runjs
+#' @importFrom shinyWidgets switchInput prettyCheckbox
+#' @return No return value. This function is called for the side effect of
+#' launching a shiny application.
+#' @examples
+#' if (interactive()) {
+#'   stat_regression_linear(mtcars)
+#' }
+#' @export
+#'
+#'
 stat_anova <- function(data, xvar, yvar, code, show_code) {
 
   if (missing(xvar)) {

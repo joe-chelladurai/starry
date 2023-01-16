@@ -1,6 +1,6 @@
 
 
-#' Plot - box
+#' Plot - Box
 #' @param data data
 #' @param x variable on x axis
 #' @param y variable on y axis

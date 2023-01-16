@@ -1,7 +1,6 @@
 
 
-
-#' Stat - linear regression
+#' Stat - Linear Regression
 #' @param data data
 #' @param xvar xvar
 #' @param yvar yvar

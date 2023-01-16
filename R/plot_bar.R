@@ -1,6 +1,6 @@
 
 
-#' Plot - bar
+#' Plot - Bar
 #' @param data data
 #' @param y variable on y axis
 #' @param fill fill

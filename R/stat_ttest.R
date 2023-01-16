@@ -1,5 +1,24 @@
 
-stat_t_test <- function(data, xvar, yvar, group, test, show_code) {
+
+#' Stat - T-test
+#' @param data data
+#' @param xvar xvar
+#' @param yvar yvar
+#' @param group groups
+#' @param test type of t-test
+#' @param show_code show/hide code
+#' @import shiny
+#' @importFrom shinyjs hidden removeClass addClass toggle runjs
+#' @importFrom shinyWidgets switchInput prettyCheckbox
+#' @return No return value. This function is called for the side effect of
+#' launching a shiny application.
+#' @examples
+#' if (interactive()) {
+#'   stat_ttest(mtcars)
+#' }
+#' @export
+
+stat_ttest <- function(data, xvar, yvar, group, test, show_code) {
 
   if (missing(xvar)) {xvar = ""} else {xvar = deparse(substitute(xvar))}
   if (missing(yvar)) {yvar = ""} else {yvar = deparse(substitute(yvar))}
@@ -8,7 +27,7 @@ stat_t_test <- function(data, xvar, yvar, group, test, show_code) {
   if (missing(show_code)) {show_code = FALSE}
 
 
-stat_t_test_ui <- function(id,
+stat_ttest_ui <- function(id,
                     ttest_yvar = yvar,
                     ttest_xvar = xvar,
                     ttest_group = group,
@@ -107,7 +126,7 @@ stat_t_test_ui <- function(id,
   )
 }
 
-stat_t_test_se <- function(id) {
+stat_ttest_se <- function(id) {
   moduleServer(id, function(input, output, session) {
     observeEvent(data, {
       delay(1000, click("updatebtn"))
@@ -291,10 +310,10 @@ ui <- fluidPage(
     )
   ),
   theme = bslib::bs_theme(),
-  stat_t_test_ui("module", data)
+  stat_ttest_ui("module", data)
 )
 server <- function(input, output, session) {
-  stat_t_test_se("module")
+  stat_ttest_se("module")
 }
 
 
@@ -304,8 +323,6 @@ shinyApp(ui, server)
 
 }
 
-
-stat_t_test(mtcars)
 
 
 

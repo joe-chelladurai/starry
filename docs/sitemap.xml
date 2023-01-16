@@ -31,7 +31,16 @@
     <loc>/reference/plot_density.html</loc>
   </url>
   <url>
+    <loc>/reference/plot_histogram.html</loc>
+  </url>
+  <url>
+    <loc>/reference/plot_line.html</loc>
+  </url>
+  <url>
     <loc>/reference/plot_scatter.html</loc>
+  </url>
+  <url>
+    <loc>/reference/stat_anova.html</loc>
   </url>
   <url>
     <loc>/reference/stat_correlation.html</loc>
@@ -41,5 +50,8 @@
   </url>
   <url>
     <loc>/reference/stat_regression_linear.html</loc>
+  </url>
+  <url>
+    <loc>/reference/stat_ttest.html</loc>
   </url>
 </urlset>

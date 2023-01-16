@@ -1,6 +1,6 @@
 
 
-#' Correlation
+#' Stat - Correlation
 #' @param data data
 #' @param xvar list of variables
 #' @param show_code show/hide code

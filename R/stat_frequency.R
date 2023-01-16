@@ -1,8 +1,9 @@
 
 
-#' Frequency
+#' Stat - Frequency
 #' @param data data
 #' @param xvar variable
+#' @param show_code show/hide code
 #' @import shiny
 #' @importFrom dplyr count
 #' @return No return value. This function is called for the side effect of
@@ -13,13 +14,14 @@
 #' }
 #' @export
 
-stat_frequency <- function(data, xvar) {
+stat_frequency <- function(data, xvar, show_code) {
 
   if (missing(xvar)) {xvar = ""} else {xvar = deparse(substitute(xvar))}
-
+  if (missing(show_code)) {show_code = FALSE}
 
   stat_frequency_ui <- function(id,
-                                frequency_xvar = xvar) {
+                                frequency_xvar = xvar,
+                                frequency_showcode = show_code) {
     ns <- NS(id)
     tagList(
       div(id = ns('placeholder1'), class = "parent",
@@ -44,7 +46,14 @@ stat_frequency <- function(data, xvar) {
                                     label = "X",
                                     choices = c("", names(data)),
                                     selected = frequency_xvar
-                     ))),
+                     ),
+
+                       prettyCheckbox(NS(id, "frequency_showcode"),
+                                      label = "show/hide code",
+                                      status = "info",
+                                      value = frequency_showcode
+                       )
+                     )),
 
                   div(class = "result-view",
 
@@ -110,6 +119,18 @@ stat_frequency <- function(data, xvar) {
       })
 
 
+      mod_id <- paste0(id, "-frequency_")
+
+      observeEvent(input$frequency_showcode, {
+        if (input$frequency_showcode == "TRUE") {
+          runjs(paste0('$("#', mod_id, 'text").css({"visibility":"visible"})'))
+        }
+        if (input$frequency_showcode == "FALSE") {
+          runjs(paste0('$("#', mod_id, 'text").css({"visibility":"hidden"})'))
+        }
+      })
+
+
     })
 
   }
@@ -154,4 +175,3 @@ stat_frequency <- function(data, xvar) {
 }
 
 
-stat_frequency(mtcars)

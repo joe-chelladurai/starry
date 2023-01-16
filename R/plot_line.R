@@ -1,4 +1,36 @@
 
+
+#' Plot - Line
+#' @param data data
+#' @param xvar xvar
+#' @param yvar yvar
+#' @param group group
+#' @param attr attr
+#' @param row facet row in grid
+#' @param column facet column in grid
+#' @param height height of plot
+#' @param width width of plot
+#' @param theme theme
+#' @param title title of plot
+#' @param subtitle subtitle of plot
+#' @param xlab x-axis
+#' @param ylab y-axis label
+#' @param caption caption
+#' @param show_code show/hide code
+#' @param code additional code
+#' @import shiny
+#' @import ggplot2
+#' @importFrom shinyjs hidden removeClass addClass toggle runjs
+#' @importFrom shinyWidgets switchInput prettyCheckbox
+#' @importFrom stringr str_detect
+#' @return No return value. This function is called for the side effect of
+#' launching a shiny application.
+#' @examples
+#' if (interactive()) {
+#'   plot_line(mtcars)
+#' }
+#' @export
+
 plot_line <- function(data, xvar, yvar, theme, group, attr, code, row, column, width, height, title, subtitle, xlab, ylab, caption, show_code){
 
   if (missing(xvar)) {xvar = ""} else {xvar = deparse(substitute(xvar))}
@@ -516,7 +548,4 @@ shinyApp(ui, server)
 
 
 }
-
-
-plot_line(mtcars)
 

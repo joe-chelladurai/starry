@@ -569,4 +569,4 @@ shinyApp(ui, server)
 
 
 }
-plot_density(mtcars)
+
