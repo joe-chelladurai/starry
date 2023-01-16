@@ -8,6 +8,8 @@ Authors@R:
 Description: Provides modular functions and applications for quickly generating 
     plots and tables. Each modular function opens a graphical user interface 
     providing the user with options to create and customise plots and tables.
+URL: https://joe-chelladurai.github.io/starry/
+BugReports: https://github.com/joe-chelladurai/starry/issues
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
